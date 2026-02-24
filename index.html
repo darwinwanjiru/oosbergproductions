@@ -3,109 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darwin Wanjiru | Dynamic Artist</title>
+    <title>Darwin Wanjiru | Multidisciplinary Artist</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;900&display=swap" rel="stylesheet">
     <style>
-        * { cursor: none; }
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .hero-title { font-size: clamp(3rem, 15vw, 12rem); font-weight: 900; line-height: 0.75; letter-spacing: -0.06em; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .custom-cursor { width: 12px; height: 12px; background: red; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s ease; }
-        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 2rem; }
+        
+        /* Anti-Download Overlay */
+        .media-guard { position: relative; }
+        .media-guard::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: transparent; }
+        
+        .horizontal-reel { display: flex; overflow-x: auto; gap: 2rem; padding: 2rem; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; }
+        .horizontal-reel::-webkit-scrollbar { display: none; }
+        
+        .project-card { min-width: 80vw; md:min-width: 450px; position: relative; transition: transform 0.5s ease; }
+        .project-card:hover { transform: translateY(-10px); }
+
+        .donate-float { position: fixed; bottom: 30px; right: 30px; z-index: 100; background: #ff0000; padding: 15px 25px; border-radius: 50px; font-weight: bold; box-shadow: 0 10px 30px rgba(255,0,0,0.3); transition: 0.3s; }
+        .donate-float:hover { transform: scale(1.1); background: #fff; color: #000; }
+
+        iframe, img { pointer-events: auto; z-index: 5; }
+        
+        .section-title { font-size: 5rem; font-weight: 900; letter-spacing: -0.05em; line-height: 0.8; margin-bottom: 2rem; }
     </style>
 </head>
 <body>
 
-    <div class="custom-cursor" id="cursor"></div>
+    <a href="#partner" class="donate-float uppercase text-xs tracking-widest">Invest in Vision</a>
 
-    <nav class="fixed top-0 left-0 w-full p-8 z-50 flex justify-between items-center mix-blend-difference">
-        <div class="font-black text-2xl tracking-tighter">DW.</div>
-        <div class="hidden md:flex space-x-12 text-[10px] uppercase tracking-[0.3em]">
-            <a href="#work" class="hover:text-red-500 transition">Work</a>
-            <a href="#upcoming" class="hover:text-red-500 transition">Upcoming</a>
-            <a href="#contact" class="hover:text-red-500 transition">Contact</a>
+    <nav class="fixed top-0 w-full p-6 z-50 flex justify-between items-center bg-gradient-to-b from-black to-transparent">
+        <div class="font-black text-xl">DW.</div>
+        <div class="space-x-6 text-[10px] uppercase tracking-widest">
+            <a href="#film">Film</a>
+            <a href="#theatre">Theatre</a>
+            <a href="#photo">Photography</a>
+            <a href="#contact">Contact</a>
         </div>
     </nav>
 
-    <section>
-        <div class="container mx-auto">
-            <h1 class="hero-title mb-8" id="title">DARWIN<br>WANJIRU</h1>
-            <p class="text-gray-500 uppercase tracking-[1em] text-[10px] animate-pulse">Multidisciplinary Creator</p>
+    <section class="min-h-screen flex flex-col justify-center px-10 relative overflow-hidden">
+        <div class="z-20">
+            <h1 class="section-title">DARWIN<br>WANJIRU</h1>
+            <p class="max-w-2xl text-gray-400 mt-6 leading-relaxed">
+                Independent international filmmaker from Kenya. I embody the complexity of theatre and the freedom of film to tackle universal questions of pain, love, and human dignity.
+            </p>
+        </div>
+        <div class="absolute right-0 top-0 w-1/2 h-full opacity-30 media-guard">
+            <img src="https://drive.google.com/thumbnail?id=1ZfHMeB_j30bYe_C2cAbinsxMBSOoBxxw&sz=w1000" class="w-full h-full object-cover">
         </div>
     </section>
 
-    <section id="work" class="bg-zinc-950">
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+    <section id="film" class="py-20 bg-zinc-950">
+        <h2 class="px-10 text-xs uppercase tracking-[1em] text-red-600 mb-4">Film: Works Done</h2>
+        <div class="horizontal-reel">
+            <div class="project-card media-guard">
+                <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/CpL2LXK1U-s" frameborder="0"></iframe>
+                <h3 class="mt-4 font-bold uppercase text-sm italic">Drift (2025) - Full Film</h3>
+            </div>
+            <div class="project-card media-guard">
+                <iframe class="w-full aspect-video" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview" frameborder="0"></iframe>
+                <h3 class="mt-4 font-bold uppercase text-sm italic">ME! - Excerpt</h3>
+            </div>
+            <div class="project-card media-guard">
+                <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/7sP2mw_k7RQ" frameborder="0"></iframe>
+                <h3 class="mt-4 font-bold uppercase text-sm italic">The Missing Piece - Trailer</h3>
+            </div>
+            <div class="project-card media-guard">
+                <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/OQQv0R_SV1I" frameborder="0"></iframe>
+                <h3 class="mt-4 font-bold uppercase text-sm italic">Blessed Conjecture - Full Film</h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="theatre" class="py-20">
+        <h2 class="px-10 text-xs uppercase tracking-[1em] text-blue-500 mb-4">Theatre Portfolio</h2>
+        <div class="horizontal-reel">
+            <div class="project-card media-guard">
+                <iframe class="w-full aspect-video" src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview"></iframe>
+                <p class="mt-2 text-xs uppercase">Last Confession - Performer</p>
+            </div>
+            <div class="project-card media-guard">
+                <iframe class="w-full aspect-video" src="https://drive.google.com/file/d/1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF/preview"></iframe>
+                <p class="mt-2 text-xs uppercase">Fractured Ties - ASM</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="photo" class="py-20 bg-zinc-950">
+        <h2 class="px-10 text-xs uppercase tracking-[1em] text-white mb-4">Photography Series</h2>
+        <div class="horizontal-reel">
+            <div class="project-card media-guard">
+                <img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800" class="w-full aspect-square object-cover">
+                <h4 class="mt-4 text-xs font-bold uppercase">Calm</h4>
+            </div>
+            <div class="project-card media-guard">
+                <img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800" class="w-full aspect-square object-cover">
+                <h4 class="mt-4 text-xs font-bold uppercase">Unity</h4>
+            </div>
+            <div class="project-card media-guard">
+                <img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800" class="w-full aspect-square object-cover">
+                <h4 class="mt-4 text-xs font-bold uppercase">IROn</h4>
+            </div>
+        </div>
+    </section>
+
+    <section id="partner" class="py-32 px-10 bg-white text-black">
+        <div class="max-w-4xl">
+            <h2 class="text-6xl font-black mb-10 tracking-tighter">PARTNER WITH THE VISION.</h2>
+            <p class="text-xl leading-relaxed mb-8">
+                In 2026, I aim to co-produce stories with international directors that address universal questions of growth and hope. I invite you to invest in this mission-driven storytelling journey.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="mailto:darwinwanjiru254@gmail.com" class="bg-black text-white px-10 py-4 uppercase font-bold text-xs">Request Production Proposal</a>
+                <div class="border-2 border-black p-4 text-xs font-bold">MPESA TILL: [Add Your Business Number]</div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="py-20 px-10 border-t border-zinc-800">
+        <div class="grid md:grid-cols-2 gap-10">
             <div>
-                <h2 class="text-5xl font-bold mb-8">FILM / THEATRE / PHOTO</h2>
-                <div class="space-y-4">
-                    <a href="https://drive.google.com/drive/folders/1z2Yz5op-BxyR0rivk98KR2_Dq0pzBqHu" target="_blank" class="block glass p-6 hover:bg-white hover:text-black transition">PHOTOGRAPHY ARCHIVE ↗</a>
-                    <a href="https://drive.google.com/drive/folders/1iywBUicIJiioExok55gXd_wYygVYcIrj" target="_blank" class="block glass p-6 hover:bg-white hover:text-black transition">THEATRE PORTFOLIO ↗</a>
-                </div>
+                <p class="text-gray-500 uppercase text-[10px] tracking-widest">Direct Contact</p>
+                <p class="text-2xl mt-2 font-bold">+254 708 813 147</p>
+                <p class="text-2xl font-bold">darwinwanjiru254@gmail.com</p>
             </div>
-            <div class="space-y-8">
-                <div>
-                    <span class="text-red-500 text-xs font-bold uppercase">Director's Reel</span>
-                    <iframe class="w-full aspect-video mt-2" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe>
-                </div>
-                <div>
-                    <span class="text-red-500 text-xs font-bold uppercase">Short Film: ME! (2025)</span>
-                    <iframe class="w-full aspect-video mt-2" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview"></iframe>
+            <div class="md:text-right">
+                <p class="text-gray-500 uppercase text-[10px] tracking-widest">Glimpse of Heaven Productions</p>
+                <div class="space-x-4 mt-2">
+                    <a href="https://www.instagram.com/glimpseofheaven.productions" class="underline">Instagram</a>
+                    <a href="https://youtube.com/@glimpseofheavenproductions" class="underline">YouTube</a>
                 </div>
             </div>
         </div>
-    </section>
-
-    <section id="upcoming" class="bg-black">
-        <div class="container mx-auto">
-            <h2 class="text-3xl font-light mb-12">NEWS & PROJECTS</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div class="border-t border-white/20 pt-6">
-                    <h4 class="font-bold">VGIK Senegal Session</h4>
-                    <p class="text-sm text-gray-500 mt-2 mb-4">International Filmmakers collaboration.</p>
-                    <a href="https://vgik.info/today/creativelife/detail.php?ID=11061" target="_blank" class="text-xs underline italic">Read Feature</a>
-                </div>
-                <div class="border-t border-white/20 pt-6">
-                    <h4 class="font-bold italic underline">DRIFT! (Short Film)</h4>
-                    <p class="text-sm text-gray-500 mt-2">Post-Production Stage.</p>
-                </div>
-                <div class="border-t border-red-500/50 pt-6 bg-red-500/5 p-4">
-                    <h4 class="font-bold">Support the Artist</h4>
-                    <p class="text-sm text-gray-400 mt-2">Help fund upcoming stage productions.</p>
-                    <button class="mt-4 border border-white px-4 py-2 text-[10px] uppercase font-bold">Donate</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="items-center text-center">
-        <h2 class="text-6xl md:text-9xl font-black mb-8 hover:italic transition-all">LET'S BUILD.</h2>
-        <a href="mailto:darwinwanjiru@email.com" class="text-xl tracking-widest border-b border-white pb-2 hover:text-red-500 transition">BOOKING@DARWINWANJIRU</a>
-    </section>
-
-    <footer class="p-8 text-[8px] text-gray-800 text-center tracking-[2em] uppercase">
-        Darwin Wanjiru Artist Portfolio © 2025
     </footer>
 
     <script>
-        // Custom Cursor Movement
-        const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-        });
-
-        // Intro Animation
-        gsap.from("#title", { duration: 2, y: 50, opacity: 0, ease: "expo.out" });
-
-        // Scroll Animations
-        gsap.utils.toArray("section").forEach(sec => {
-            gsap.from(sec, {
-                scrollTrigger: { trigger: sec, start: "top 80%" },
-                opacity: 0, y: 30, duration: 1.5
-            });
-        });
+        // Disable Right Click & Save
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // GSAP scroll animations
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from(".section-title", { duration: 1.5, y: 100, opacity: 0, ease: "power4.out" });
     </script>
 </body>
 </html>
