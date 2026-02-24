@@ -1,3 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darwin Wanjiru — Dynamic Artist</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+body{margin:0;background:black;color:white;font-family:sans-serif;overflow-x:hidden}
+.page{min-height:100vh;padding:120px 60px;display:none}
+.active{display:block}
+video.bg{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:black;z-index:10;display:flex;align-items:center;justify-content:center}
+.nav{position:fixed;top:30px;right:40px;z-index:20}
+.nav a{margin-left:20px;cursor:pointer}
+.bottom-left{position:fixed;bottom:20px;left:30px;z-index:20;font-size:14px}
+.bottom-right{position:fixed;bottom:20px;right:30px;z-index:20;font-size:14px;text-align:right}
+.partner-bar{margin-top:100px;text-align:center;opacity:.6;font-size:12px}
+.horizontal{display:flex;gap:40px;overflow-x:auto}
+.card{min-width:400px}
+.no-download{user-select:none;-webkit-user-drag:none}
+</style>
+</head>
+
+<body>
+
+<!-- cinematic loader -->
+<div class="overlay"><h1 class="text-5xl tracking-widest">DARWIN WANJIRU</h1></div>
+
+<!-- background video -->
+<video autoplay muted loop class="bg"><source src="your-background-video.mp4"></video>
+
+<!-- top navigation -->
+<div class="nav">
+<a onclick="showPage('home')">HOME</a>
+<a onclick="showPage('film')">FILM</a>
+<a onclick="showPage('photography')">PHOTOGRAPHY</a>
+<a onclick="showPage('theatre')">THEATRE</a>
+<a onclick="showPage('collaborate')">COLLABORATE</a>
+</div>
+
+<!-- global contact -->
+<div class="bottom-left">
+darwinwanjiru254@gmail.com<br>+254708813147
+</div>
+
+<div class="bottom-right">
+<a href="https://www.instagram.com/glimpseofheaven.productions?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a><br>
+<a href="mailto:glimpseofheaven.productions@gmail.com">Email</a><br>
+<a href="https://youtube.com/@glimpseofheavenproductions?si=EW8g5N717xdRD0jr" target="_blank">YouTube</a>
+</div>
+
+<!-- HOME PAGE -->
+<section id="home" class="page active text-center">
+<h1 class="text-7xl mb-10">DYNAMIC ARTIST</h1>
+
+<iframe class="w-full max-w-5xl h-[500px] mx-auto mb-12" src="https://drive.google.com/uc?export=preview&id=1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_"></iframe>
+
+<div class="max-w-3xl mx-auto space-y-8">
+<p class="opacity-70">I am an independent international filmmaker from Kenya with a passion for producing stories that first entertain, then educate society on issues affecting their social, physical, economic, and spiritual well-being.</p>
+<p class="opacity-60">Film entertains the masses and has the extreme potential of educating the masses. As a director, I utilize film as a transformative tool by inspiring thought and challenging perspective.</p>
+</div>
+
+<div class="grid md:grid-cols-4 gap-4 mt-20">
+<button onclick="showPage('film')" class="border p-20">FILM</button>
+<button onclick="showPage('photography')" class="border p-20">PHOTOGRAPHY</button>
+<button onclick="showPage('theatre')" class="border p-20">THEATRE</button>
+<button onclick="showPage('collaborate')" class="border p-20">COLLABORATE</button>
+</div>
+
+<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
+</section>
+
+<!-- FILM PAGE -->
+<section id="film" class="page">
+<h1 class="text-5xl mb-10">FILM</h1>
+
+<h2 class="text-2xl mb-6">Completed Projects</h2>
+<div class="horizontal">
+<div class="card">
+<p>Drift (2025)</p>
+<iframe class="w-full h-80" src="https://www.youtube.com/embed/CpL2LXK1U-s"></iframe>
+</div>
+
+<div class="card">
+<p>ME! (2025)</p>
+<iframe class="w-full h-80" src="https://drive.google.com/uc?export=preview&id=1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg"></iframe>
+</div>
+
+<div class="card">
+<p>The Missing Piece (Trailer)</p>
+<iframe class="w-full h-80" src="https://www.youtube.com/embed/7sP2mw_k7RQ"></iframe>
+</div>
+
+<div class="card">
+<p>Blessed Conjecture (2022)</p>
+<iframe class="w-full h-80" src="https://www.youtube.com/embed/OQQv0R_SV1I"></iframe>
+</div>
+</div>
+
+<h2 class="text-2xl mt-16 mb-6">Upcoming Projects</h2>
+<div class="horizontal">
+<div class="card border p-10">RUN! (2026)</div>
+<div class="card border p-10">The Waiting Room (2026)</div>
+</div>
+
+<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
+</section>
+
+<!-- PHOTOGRAPHY -->
+<section id="photography" class="page">
+<h1 class="text-5xl mb-10">PHOTOGRAPHY</h1>
+<div class="horizontal">
+<img class="card no-download" src="https://drive.google.com/uc?export=view&id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61">
+<img class="card no-download" src="https://drive.google.com/uc?export=view&id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7">
+<img class="card no-download" src="https://drive.google.com/uc?export=view&id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB">
+</div>
+
+<div class="mt-16">
+<h2>Upcoming Project — Why: A Photobook</h2>
+<p class="opacity-60 max-w-xl">A thought provoking photobook exploring environmental responsibility and social spaces.</p>
+</div>
+
+<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
+</section>
+
+<!-- THEATRE -->
+<section id="theatre" class="page">
+<h1 class="text-5xl mb-10">THEATRE</h1>
+<div class="horizontal">
+<iframe class="card h-80" src="https://drive.google.com/uc?export=preview&id=1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6"></iframe>
+<iframe class="card h-80" src="https://drive.google.com/uc?export=preview&id=1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF"></iframe>
+</div>
+
+<div class="mt-16">Upcoming Project — The Black Sheep</div>
+
+<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
+</section>
+
+<!-- COLLABORATE -->
+<section id="collaborate" class="page text-center">
+<h1 class="text-5xl mb-10">COLLABORATE</h1>
+<p class="max-w-xl mx-auto mb-10 opacity-70">Partner with me in creating transformative films, theatre and visual storytelling that impact society.</p>
+
+<div class="space-y-4">
+<p>Follow Glimpse of Heaven Productions</p>
+<a href="https://youtube.com/@glimpseofheavenproductions?si=EW8g5N717xdRD0jr" target="_blank">YouTube</a><br>
+<a href="https://www.instagram.com/glimpseofheaven.productions" target="_blank">Instagram</a>
+
+<p class="mt-10">Support my filmmaking journey</p>
+<button class="border px-8 py-4">Support via M-Pesa</button>
+</div>
+
+<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
+</section>
+
+<script>
+// loader
+gsap.to('.overlay',{opacity:0,duration:1.5,delay:1,onComplete:()=>document.querySelector('.overlay').style.display='none'})
+
+function showPage(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+document.getElementById(id).classList.add('active')
+window.scrollTo(0,0)
+}
+</script>
+
+</body>
+</html>
+
+
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
