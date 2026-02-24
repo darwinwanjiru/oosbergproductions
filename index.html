@@ -1,172 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Darwin Wanjiru — Dynamic Artist</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darwin Wanjiru | Multidisciplinary Artist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root { --accent: #ff6b00; --bg: #050505; }
+        body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; cursor: crosshair; }
+        
+        /* Persistent Layout Elements */
+        nav { position: fixed; top: 40px; right: 40px; z-index: 1000; }
+        .nav-link { font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; transition: 0.4s; color: #888; }
+        .nav-link:hover, .nav-link.active { color: var(--accent); transform: translateX(-5px); }
 
-<style>
-body{margin:0;background:black;color:white;font-family:sans-serif;overflow-x:hidden}
-.page{min-height:100vh;padding:120px 60px;display:none}
-.active{display:block}
-video.bg{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:black;z-index:10;display:flex;align-items:center;justify-content:center}
-.nav{position:fixed;top:30px;right:40px;z-index:20}
-.nav a{margin-left:20px;cursor:pointer}
-.bottom-left{position:fixed;bottom:20px;left:30px;z-index:20;font-size:14px}
-.bottom-right{position:fixed;bottom:20px;right:30px;z-index:20;font-size:14px;text-align:right}
-.partner-bar{margin-top:100px;text-align:center;opacity:.6;font-size:12px}
-.horizontal{display:flex;gap:40px;overflow-x:auto}
-.card{min-width:400px}
-.no-download{user-select:none;-webkit-user-drag:none}
-</style>
+        /* Bottom HUD elements [cite: 14, 15, 138] */
+        .hud-left { position: fixed; bottom: 40px; left: 40px; font-size: 10px; z-index: 100; opacity: 0.6; }
+        .hud-right { position: fixed; bottom: 40px; right: 40px; z-index: 100; text-align: right; }
+        .hud-center { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 9px; z-index: 100; opacity: 0.4; display: flex; gap: 20px; }
+
+        /* Scrolling Systems [cite: 43, 79, 101] */
+        .horizontal-reel { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 40px; padding: 20px 0; -ms-overflow-style: none; scrollbar-width: none; }
+        .horizontal-reel::-webkit-scrollbar { display: none; }
+        .scroll-button { background: var(--accent); color: #000; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        
+        /* Cinematic Backgrounds [cite: 44, 70] */
+        #bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; filter: grayscale(100%) brightness(30%); }
+        .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, #000 90%); z-index: 0; }
+
+        /* Typography Effects [cite: 21] */
+        .typing-text { border-right: 2px solid var(--accent); animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { border-color: transparent; } }
+        
+        /* Security [cite: 132] */
+        img, video, iframe { pointer-events: none; -webkit-user-drag: none; }
+        .interaction-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; }
+    </style>
 </head>
-
 <body>
 
-<!-- cinematic loader -->
-<div class="overlay"><h1 class="text-5xl tracking-widest">DARWIN WANJIRU</h1></div>
+    <div id="bg-container">
+        <iframe id="main-bg-video" src="https://www.youtube.com/embed/CpL2LXK1U-s?autoplay=1&mute=1&controls=0&loop=1" frameborder="0" class="w-full h-full"></iframe>
+    </div>
+    <div class="vignette"></div>
 
-<!-- background video -->
-<video autoplay muted loop class="bg"><source src="your-background-video.mp4"></video>
+    <nav class="flex flex-col gap-6 text-right">
+        <a href="#home" onclick="navTo('home')" class="nav-link active">Home</a>
+        <a href="#film" onclick="navTo('film')" class="nav-link">Film</a>
+        <a href="#photo" onclick="navTo('photo')" class="nav-link">Photography</a>
+        <a href="#theatre" onclick="navTo('theatre')" class="nav-link">Theater</a>
+        <a href="#collaborate" onclick="navTo('collaborate')" class="nav-link">Collaborate</a>
+    </nav>
 
-<!-- top navigation -->
-<div class="nav">
-<a onclick="showPage('home')">HOME</a>
-<a onclick="showPage('film')">FILM</a>
-<a onclick="showPage('photography')">PHOTOGRAPHY</a>
-<a onclick="showPage('theatre')">THEATRE</a>
-<a onclick="showPage('collaborate')">COLLABORATE</a>
-</div>
+    <div class="hud-left uppercase tracking-widest">
+        <p>+254 708 813 147</p>
+        <p>darwinwanjiru254@gmail.com</p>
+    </div>
 
-<!-- global contact -->
-<div class="bottom-left">
-darwinwanjiru254@gmail.com<br>+254708813147
-</div>
+    <div class="hud-center uppercase">
+        <span>Glimpse of Heaven</span>
+        <span>Oosberg Productions</span>
+        <span>HWC Entertainment</span>
+        <span>Igiza Arts</span>
+    </div>
 
-<div class="bottom-right">
-<a href="https://www.instagram.com/glimpseofheaven.productions?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a><br>
-<a href="mailto:glimpseofheaven.productions@gmail.com">Email</a><br>
-<a href="https://youtube.com/@glimpseofheavenproductions?si=EW8g5N717xdRD0jr" target="_blank">YouTube</a>
-</div>
+    <div class="hud-right">
+        <div class="flex gap-4 mb-4 justify-end text-[10px] uppercase tracking-tighter">
+            <a href="https://instagram.com/..." target="_blank">Instagram</a>
+            <a href="https://youtube.com/..." target="_blank">YouTube</a>
+        </div>
+        <button onclick="navTo('collaborate')" class="bg-[#ff6b00] text-black px-4 py-2 text-[10px] font-bold uppercase">Support the Journey</button>
+    </div>
 
-<!-- HOME PAGE -->
-<section id="home" class="page active text-center">
-<h1 class="text-7xl mb-10">DYNAMIC ARTIST</h1>
+    <main id="content-anchor">
+        <section id="home-page" class="min-h-screen p-20 flex flex-col justify-center">
+            <h1 class="text-7xl font-black mb-10 tracking-tighter uppercase leading-none">
+                Independent <br><span class="text-[#ff6b00]">Filmmaker</span>
+            </h1>
+            <div class="max-w-2xl text-xs uppercase tracking-[0.3em] leading-loose opacity-80" id="intro-statement">
+                I am a dynamic artist... (Content from Source 22-25)
+            </div>
+            
+            <div class="flex mt-20 gap-4">
+                <div class="h-32 flex-1 bg-cover bg-center border border-white/10 hover:border-accent transition group relative overflow-hidden" style="background-image: url('missing_piece_poster.jpg')">
+                   <div class="absolute inset-0 bg-black/60 group-hover:bg-transparent flex items-center justify-center">FILM</div>
+                </div>
+                </div>
+        </section>
 
-<iframe class="w-full max-w-5xl h-[500px] mx-auto mb-12" src="https://drive.google.com/uc?export=preview&id=1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_"></iframe>
+        <section id="film-page" class="hidden p-20">
+            <h2 class="text-xs uppercase tracking-[1em] mb-10 border-b border-white/10 pb-4">Film Archive</h2>
+            
+            <div class="mb-20">
+                <p class="text-[10px] uppercase mb-4 opacity-50">Completed Projects</p>
+                <div class="horizontal-reel" id="film-completed">
+                    <div class="card min-w-[500px]">
+                        <div class="relative group">
+                            <iframe class="w-full aspect-video" src="https://youtube.com/embed/CpL2LXK1U-s?mute=1"></iframe>
+                            <div class="interaction-layer"></div>
+                        </div>
+                        <div class="flex justify-between mt-4">
+                            <span class="text-[10px] uppercase font-bold">Drift (2025)</span>
+                            <span class="text-[9px] opacity-40 italic">Producer</span>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </section>
 
-<div class="max-w-3xl mx-auto space-y-8">
-<p class="opacity-70">I am an independent international filmmaker from Kenya with a passion for producing stories that first entertain, then educate society on issues affecting their social, physical, economic, and spiritual well-being.</p>
-<p class="opacity-60">Film entertains the masses and has the extreme potential of educating the masses. As a director, I utilize film as a transformative tool by inspiring thought and challenging perspective.</p>
-</div>
+        <section id="photo-page" class="hidden p-20">
+             <h2 class="text-xs uppercase tracking-[1em] mb-10">Stills</h2>
+             <div class="horizontal-reel">
+                 <div class="card min-w-[300px]"><img src="calm.jpg" class="grayscale hover:grayscale-0 transition-all duration-1000"><p class="text-[10px] mt-2 text-center">CALM</p></div>
+                 <div class="card min-w-[300px]"><img src="iron.jpg" class="grayscale hover:grayscale-0 transition-all duration-1000"><p class="text-[10px] mt-2 text-center">IRON</p></div>
+             </div>
+        </section>
+    </main>
 
-<div class="grid md:grid-cols-4 gap-4 mt-20">
-<button onclick="showPage('film')" class="border p-20">FILM</button>
-<button onclick="showPage('photography')" class="border p-20">PHOTOGRAPHY</button>
-<button onclick="showPage('theatre')" class="border p-20">THEATRE</button>
-<button onclick="showPage('collaborate')" class="border p-20">COLLABORATE</button>
-</div>
+    <script>
+        // NAVIGATION LOGIC [cite: 8, 17]
+        function navTo(page) {
+            const pages = ['home-page', 'film-page', 'photo-page', 'theatre-page', 'collaborate-page'];
+            pages.forEach(p => {
+                document.getElementById(p).style.display = p.includes(page) ? 'block' : 'none';
+            });
+            // Background shift [cite: 44]
+            const bgVideo = document.getElementById('main-bg-video');
+            if(page === 'film') bgVideo.src = "https://www.youtube.com/embed/7sP2mw_k7RQ?autoplay=1&mute=1&controls=0&loop=1";
+        }
 
-<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
-</section>
+        // TYPING EFFECT [cite: 21]
+        const text = "I am an independent international filmmaker from Kenya...";
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                document.getElementById("intro-statement").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 30);
+            }
+        }
+        window.onload = typeWriter;
 
-<!-- FILM PAGE -->
-<section id="film" class="page">
-<h1 class="text-5xl mb-10">FILM</h1>
-
-<h2 class="text-2xl mb-6">Completed Projects</h2>
-<div class="horizontal">
-<div class="card">
-<p>Drift (2025)</p>
-<iframe class="w-full h-80" src="https://www.youtube.com/embed/CpL2LXK1U-s"></iframe>
-</div>
-
-<div class="card">
-<p>ME! (2025)</p>
-<iframe class="w-full h-80" src="https://drive.google.com/uc?export=preview&id=1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg"></iframe>
-</div>
-
-<div class="card">
-<p>The Missing Piece (Trailer)</p>
-<iframe class="w-full h-80" src="https://www.youtube.com/embed/7sP2mw_k7RQ"></iframe>
-</div>
-
-<div class="card">
-<p>Blessed Conjecture (2022)</p>
-<iframe class="w-full h-80" src="https://www.youtube.com/embed/OQQv0R_SV1I"></iframe>
-</div>
-</div>
-
-<h2 class="text-2xl mt-16 mb-6">Upcoming Projects</h2>
-<div class="horizontal">
-<div class="card border p-10">RUN! (2026)</div>
-<div class="card border p-10">The Waiting Room (2026)</div>
-</div>
-
-<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
-</section>
-
-<!-- PHOTOGRAPHY -->
-<section id="photography" class="page">
-<h1 class="text-5xl mb-10">PHOTOGRAPHY</h1>
-<div class="horizontal">
-<img class="card no-download" src="https://drive.google.com/uc?export=view&id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61">
-<img class="card no-download" src="https://drive.google.com/uc?export=view&id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7">
-<img class="card no-download" src="https://drive.google.com/uc?export=view&id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB">
-</div>
-
-<div class="mt-16">
-<h2>Upcoming Project — Why: A Photobook</h2>
-<p class="opacity-60 max-w-xl">A thought provoking photobook exploring environmental responsibility and social spaces.</p>
-</div>
-
-<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
-</section>
-
-<!-- THEATRE -->
-<section id="theatre" class="page">
-<h1 class="text-5xl mb-10">THEATRE</h1>
-<div class="horizontal">
-<iframe class="card h-80" src="https://drive.google.com/uc?export=preview&id=1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6"></iframe>
-<iframe class="card h-80" src="https://drive.google.com/uc?export=preview&id=1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF"></iframe>
-</div>
-
-<div class="mt-16">Upcoming Project — The Black Sheep</div>
-
-<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
-</section>
-
-<!-- COLLABORATE -->
-<section id="collaborate" class="page text-center">
-<h1 class="text-5xl mb-10">COLLABORATE</h1>
-<p class="max-w-xl mx-auto mb-10 opacity-70">Partner with me in creating transformative films, theatre and visual storytelling that impact society.</p>
-
-<div class="space-y-4">
-<p>Follow Glimpse of Heaven Productions</p>
-<a href="https://youtube.com/@glimpseofheavenproductions?si=EW8g5N717xdRD0jr" target="_blank">YouTube</a><br>
-<a href="https://www.instagram.com/glimpseofheaven.productions" target="_blank">Instagram</a>
-
-<p class="mt-10">Support my filmmaking journey</p>
-<button class="border px-8 py-4">Support via M-Pesa</button>
-</div>
-
-<div class="partner-bar">Partners: Glimpse of Heaven Productions • Oosberg Productions • HWC Entertainment • Igiza Arts Productions • Creative Box Productions • Artofunnex • Hamptons Collections</div>
-</section>
-
-<script>
-// loader
-gsap.to('.overlay',{opacity:0,duration:1.5,delay:1,onComplete:()=>document.querySelector('.overlay').style.display='none'})
-
-function showPage(id){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
-document.getElementById(id).classList.add('active')
-window.scrollTo(0,0)
-}
-</script>
-
+        // SECURITY: Block Right Click [cite: 132]
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
 </body>
 </html>
