@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darwin Wanjiru | Dynamic Artist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * { cursor: none; }
+        body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .hero-title { font-size: clamp(3rem, 15vw, 12rem); font-weight: 900; line-height: 0.75; letter-spacing: -0.06em; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .custom-cursor { width: 12px; height: 12px; background: red; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s ease; }
+        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 2rem; }
+    </style>
+</head>
+<body>
+
+    <div class="custom-cursor" id="cursor"></div>
+
+    <nav class="fixed top-0 left-0 w-full p-8 z-50 flex justify-between items-center mix-blend-difference">
+        <div class="font-black text-2xl tracking-tighter">DW.</div>
+        <div class="hidden md:flex space-x-12 text-[10px] uppercase tracking-[0.3em]">
+            <a href="#work" class="hover:text-red-500 transition">Work</a>
+            <a href="#upcoming" class="hover:text-red-500 transition">Upcoming</a>
+            <a href="#contact" class="hover:text-red-500 transition">Contact</a>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container mx-auto">
+            <h1 class="hero-title mb-8" id="title">DARWIN<br>WANJIRU</h1>
+            <p class="text-gray-500 uppercase tracking-[1em] text-[10px] animate-pulse">Multidisciplinary Creator</p>
+        </div>
+    </section>
+
+    <section id="work" class="bg-zinc-950">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div>
+                <h2 class="text-5xl font-bold mb-8">FILM / THEATRE / PHOTO</h2>
+                <div class="space-y-4">
+                    <a href="https://drive.google.com/drive/folders/1z2Yz5op-BxyR0rivk98KR2_Dq0pzBqHu" target="_blank" class="block glass p-6 hover:bg-white hover:text-black transition">PHOTOGRAPHY ARCHIVE ↗</a>
+                    <a href="https://drive.google.com/drive/folders/1iywBUicIJiioExok55gXd_wYygVYcIrj" target="_blank" class="block glass p-6 hover:bg-white hover:text-black transition">THEATRE PORTFOLIO ↗</a>
+                </div>
+            </div>
+            <div class="space-y-8">
+                <div>
+                    <span class="text-red-500 text-xs font-bold uppercase">Director's Reel</span>
+                    <iframe class="w-full aspect-video mt-2" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe>
+                </div>
+                <div>
+                    <span class="text-red-500 text-xs font-bold uppercase">Short Film: ME! (2025)</span>
+                    <iframe class="w-full aspect-video mt-2" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="upcoming" class="bg-black">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-light mb-12">NEWS & PROJECTS</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="border-t border-white/20 pt-6">
+                    <h4 class="font-bold">VGIK Senegal Session</h4>
+                    <p class="text-sm text-gray-500 mt-2 mb-4">International Filmmakers collaboration.</p>
+                    <a href="https://vgik.info/today/creativelife/detail.php?ID=11061" target="_blank" class="text-xs underline italic">Read Feature</a>
+                </div>
+                <div class="border-t border-white/20 pt-6">
+                    <h4 class="font-bold italic underline">DRIFT! (Short Film)</h4>
+                    <p class="text-sm text-gray-500 mt-2">Post-Production Stage.</p>
+                </div>
+                <div class="border-t border-red-500/50 pt-6 bg-red-500/5 p-4">
+                    <h4 class="font-bold">Support the Artist</h4>
+                    <p class="text-sm text-gray-400 mt-2">Help fund upcoming stage productions.</p>
+                    <button class="mt-4 border border-white px-4 py-2 text-[10px] uppercase font-bold">Donate</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="items-center text-center">
+        <h2 class="text-6xl md:text-9xl font-black mb-8 hover:italic transition-all">LET'S BUILD.</h2>
+        <a href="mailto:darwinwanjiru@email.com" class="text-xl tracking-widest border-b border-white pb-2 hover:text-red-500 transition">BOOKING@DARWINWANJIRU</a>
+    </section>
+
+    <footer class="p-8 text-[8px] text-gray-800 text-center tracking-[2em] uppercase">
+        Darwin Wanjiru Artist Portfolio © 2025
+    </footer>
+
+    <script>
+        // Custom Cursor Movement
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        // Intro Animation
+        gsap.from("#title", { duration: 2, y: 50, opacity: 0, ease: "expo.out" });
+
+        // Scroll Animations
+        gsap.utils.toArray("section").forEach(sec => {
+            gsap.from(sec, {
+                scrollTrigger: { trigger: sec, start: "top 80%" },
+                opacity: 0, y: 30, duration: 1.5
+            });
+        });
+    </script>
+</body>
+</html>
