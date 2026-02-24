@@ -6,144 +6,193 @@
     <title>Darwin Wanjiru | Multidisciplinary Artist</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;900&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #ff6b00; --bg: #050505; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; cursor: crosshair; }
+        :root { --orange: #ff6b00; --obsidian: #050505; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        body { background-color: var(--obsidian); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
-        /* Persistent Layout Elements */
-        nav { position: fixed; top: 40px; right: 40px; z-index: 1000; }
-        .nav-link { font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; transition: 0.4s; color: #888; }
-        .nav-link:hover, .nav-link.active { color: var(--accent); transform: translateX(-5px); }
+        /* Unified Background Reel  */
+        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .video-bg iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; opacity: 0.3; filter: grayscale(100%) contrast(120%); }
+        .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, var(--obsidian) 95%); z-index: 0; pointer-events: none; }
 
-        /* Bottom HUD elements [cite: 14, 15, 138] */
-        .hud-left { position: fixed; bottom: 40px; left: 40px; font-size: 10px; z-index: 100; opacity: 0.6; }
-        .hud-right { position: fixed; bottom: 40px; right: 40px; z-index: 100; text-align: right; }
-        .hud-center { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 9px; z-index: 100; opacity: 0.4; display: flex; gap: 20px; }
+        /* Navigation [cite: 6, 7, 15] */
+        nav { z-index: 100; mix-blend-mode: difference; }
+        .nav-link { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; color: #666; transition: 0.3s; }
+        .nav-link.active, .nav-link:hover { color: var(--orange); }
 
-        /* Scrolling Systems [cite: 43, 79, 101] */
-        .horizontal-reel { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 40px; padding: 20px 0; -ms-overflow-style: none; scrollbar-width: none; }
-        .horizontal-reel::-webkit-scrollbar { display: none; }
-        .scroll-button { background: var(--accent); color: #000; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        /* Content Sections */
+        .page-section { display: none; padding: 15vh 5vw 10vh; min-height: 100vh; position: relative; z-index: 10; }
+        .page-section.active { display: block; }
+
+        /* Horizontal Reels  */
+        .reel-container { position: relative; margin-bottom: 80px; }
+        .reel-title { font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; border-left: 2px solid var(--orange); padding-left: 15px; }
+        .horizontal-scroll { display: flex; overflow-x: auto; gap: 30px; scroll-behavior: smooth; padding: 20px 0; -ms-overflow-style: none; scrollbar-width: none; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
         
-        /* Cinematic Backgrounds [cite: 44, 70] */
-        #bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; filter: grayscale(100%) brightness(30%); }
-        .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, #000 90%); z-index: 0; }
+        .card { min-width: 380px; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: 0.5s; }
+        .card:hover { border-color: var(--orange); transform: translateY(-10px); }
 
-        /* Typography Effects [cite: 21] */
-        .typing-text { border-right: 2px solid var(--accent); animation: blink 0.7s infinite; }
-        @keyframes blink { 50% { border-color: transparent; } }
-        
-        /* Security [cite: 132] */
-        img, video, iframe { pointer-events: none; -webkit-user-drag: none; }
-        .interaction-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; }
+        .btn-nav { background: var(--orange); color: #000; width: 40px; height: 40px; border-radius: 50%; display: flex; items-center; justify-content: center; font-weight: bold; cursor: pointer; transition: 0.3s; position: absolute; top: 50%; transform: translateY(-50%); z-index: 20; }
+        .btn-prev { left: -20px; }
+        .btn-next { right: -20px; }
+
+        /* Typography */
+        .huge-title { font-family: 'Playfair Display', serif; font-size: clamp(4rem, 15vw, 18rem); line-height: 0.8; letter-spacing: -0.05em; }
+        .typing-container { font-size: 12px; line-height: 2; letter-spacing: 0.2em; color: #aaa; text-transform: uppercase; max-width: 600px; }
+
+        /* HUD [cite: 14, 15] */
+        .hud-left { position: fixed; bottom: 40px; left: 40px; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; z-index: 100; mix-blend-mode: difference; }
+        .hud-right { position: fixed; bottom: 40px; right: 40px; text-align: right; font-size: 10px; z-index: 100; mix-blend-mode: difference; }
     </style>
 </head>
 <body>
 
-    <div id="bg-container">
-        <iframe id="main-bg-video" src="https://www.youtube.com/embed/CpL2LXK1U-s?autoplay=1&mute=1&controls=0&loop=1" frameborder="0" class="w-full h-full"></iframe>
+    <div class="video-bg">
+        <iframe src="https://www.youtube.com/embed/CpL2LXK1U-s?autoplay=1&mute=1&controls=0&loop=1&playlist=CpL2LXK1U-s" frameborder="0"></iframe>
     </div>
     <div class="vignette"></div>
 
-    <nav class="flex flex-col gap-6 text-right">
-        <a href="#home" onclick="navTo('home')" class="nav-link active">Home</a>
-        <a href="#film" onclick="navTo('film')" class="nav-link">Film</a>
-        <a href="#photo" onclick="navTo('photo')" class="nav-link">Photography</a>
-        <a href="#theatre" onclick="navTo('theatre')" class="nav-link">Theater</a>
-        <a href="#collaborate" onclick="navTo('collaborate')" class="nav-link">Collaborate</a>
+    <div class="hud-left">
+        <p>darwinwanjiru254@gmail.com</p>
+        <p>+254 708 813 147</p>
+    </div>
+    <div class="hud-right">
+        <a href="https://instagram.com/..." class="block">INSTAGRAM</a>
+        <a href="https://youtube.com/..." class="block">YOUTUBE</a>
+        <p class="mt-4 text-[#ff6b00]">GLIMPSE OF HEAVEN PRODUCTIONS</p>
+    </div>
+
+    <nav class="fixed top-0 w-full p-10 flex justify-between items-start">
+        <div class="huge-title text-2xl tracking-tighter cursor-pointer" onclick="showPage('home')">D.W.</div>
+        <div class="flex flex-col gap-4 text-right">
+            <span onclick="showPage('home')" class="nav-link active" id="n-home">Home</span>
+            <span onclick="showPage('film')" class="nav-link" id="n-film">Film</span>
+            <span onclick="showPage('theatre')" class="nav-link" id="n-theatre">Theatre</span>
+            <span onclick="showPage('photo')" class="nav-link" id="n-photo">Photography</span>
+            <span onclick="showPage('collab')" class="nav-link" id="n-collab">Collaborate</span>
+        </div>
     </nav>
 
-    <div class="hud-left uppercase tracking-widest">
-        <p>+254 708 813 147</p>
-        <p>darwinwanjiru254@gmail.com</p>
-    </div>
-
-    <div class="hud-center uppercase">
-        <span>Glimpse of Heaven</span>
-        <span>Oosberg Productions</span>
-        <span>HWC Entertainment</span>
-        <span>Igiza Arts</span>
-    </div>
-
-    <div class="hud-right">
-        <div class="flex gap-4 mb-4 justify-end text-[10px] uppercase tracking-tighter">
-            <a href="https://instagram.com/..." target="_blank">Instagram</a>
-            <a href="https://youtube.com/..." target="_blank">YouTube</a>
+    <section id="home" class="page-section active">
+        <h1 class="huge-title">DARWIN<br><span class="text-[#ff6b00]">WANJIRU</span></h1>
+        <div class="grid md:grid-cols-2 mt-20 gap-20">
+            <div class="typing-container" id="typewriter">
+                </div>
+            <div class="flex flex-col gap-4">
+                <iframe class="w-full aspect-video border border-white/10" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe>
+                <p class="text-[9px] uppercase tracking-[0.5em] opacity-40">Director's Reel 2026</p>
+            </div>
         </div>
-        <button onclick="navTo('collaborate')" class="bg-[#ff6b00] text-black px-4 py-2 text-[10px] font-bold uppercase">Support the Journey</button>
-    </div>
+    </section>
 
-    <main id="content-anchor">
-        <section id="home-page" class="min-h-screen p-20 flex flex-col justify-center">
-            <h1 class="text-7xl font-black mb-10 tracking-tighter uppercase leading-none">
-                Independent <br><span class="text-[#ff6b00]">Filmmaker</span>
-            </h1>
-            <div class="max-w-2xl text-xs uppercase tracking-[0.3em] leading-loose opacity-80" id="intro-statement">
-                I am a dynamic artist... (Content from Source 22-25)
+    <section id="film" class="page-section">
+        <h2 class="huge-title text-6xl mb-20 uppercase">Film</h2>
+        
+        <div class="reel-container">
+            <h3 class="reel-title">Completed Projects</h3>
+            <div class="btn-nav btn-prev" onclick="scrollR('reel-f-c', -400)">←</div>
+            <div class="horizontal-scroll" id="reel-f-c">
+                <div class="card"><iframe src="https://www.youtube.com/embed/CpL2LXK1U-s" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">DRIFT (2025)</p></div>
+                <div class="card"><iframe src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">ME! (2025)</p></div>
+                <div class="card"><iframe src="https://www.youtube.com/embed/7sP2mw_k7RQ" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">THE MISSING PIECE (2025)</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1EPuffUNDUwhcchwhLk1zw1DbSBzby9OM&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-xs font-bold">STROKES OF LIFE (2024)</p></div>
+                <div class="card"><iframe src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">TOUGH CHANGES (2022)</p></div>
+                <div class="card"><iframe src="https://www.youtube.com/embed/OQQv0R_SV1I" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">BLESSED CONJECTURE (2022)</p></div>
             </div>
-            
-            <div class="flex mt-20 gap-4">
-                <div class="h-32 flex-1 bg-cover bg-center border border-white/10 hover:border-accent transition group relative overflow-hidden" style="background-image: url('missing_piece_poster.jpg')">
-                   <div class="absolute inset-0 bg-black/60 group-hover:bg-transparent flex items-center justify-center">FILM</div>
-                </div>
-                </div>
-        </section>
+            <div class="btn-nav btn-next" onclick="scrollR('reel-f-c', 400)">→</div>
+        </div>
 
-        <section id="film-page" class="hidden p-20">
-            <h2 class="text-xs uppercase tracking-[1em] mb-10 border-b border-white/10 pb-4">Film Archive</h2>
-            
-            <div class="mb-20">
-                <p class="text-[10px] uppercase mb-4 opacity-50">Completed Projects</p>
-                <div class="horizontal-reel" id="film-completed">
-                    <div class="card min-w-[500px]">
-                        <div class="relative group">
-                            <iframe class="w-full aspect-video" src="https://youtube.com/embed/CpL2LXK1U-s?mute=1"></iframe>
-                            <div class="interaction-layer"></div>
-                        </div>
-                        <div class="flex justify-between mt-4">
-                            <span class="text-[10px] uppercase font-bold">Drift (2025)</span>
-                            <span class="text-[9px] opacity-40 italic">Producer</span>
-                        </div>
-                    </div>
-                    </div>
+        <div class="reel-container">
+            <h3 class="reel-title">Upcoming Projects</h3>
+            <div class="horizontal-scroll">
+                <div class="card border-dashed"><h4 class="text-2xl font-black">RUN!</h4><p class="text-[9px] uppercase mt-2">Short Film 2026</p></div>
+                <div class="card border-dashed"><h4 class="text-2xl font-black">THE WAITING ROOM</h4><p class="text-[9px] uppercase mt-2">Short Film 2026</p></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="photo-page" class="hidden p-20">
-             <h2 class="text-xs uppercase tracking-[1em] mb-10">Stills</h2>
-             <div class="horizontal-reel">
-                 <div class="card min-w-[300px]"><img src="calm.jpg" class="grayscale hover:grayscale-0 transition-all duration-1000"><p class="text-[10px] mt-2 text-center">CALM</p></div>
-                 <div class="card min-w-[300px]"><img src="iron.jpg" class="grayscale hover:grayscale-0 transition-all duration-1000"><p class="text-[10px] mt-2 text-center">IRON</p></div>
-             </div>
-        </section>
-    </main>
+    <section id="theatre" class="page-section">
+        <h2 class="huge-title text-6xl mb-20 uppercase">Theatre</h2>
+        <div class="reel-container">
+            <h3 class="reel-title">Completed Plays</h3>
+            <div class="btn-nav btn-prev" onclick="scrollR('reel-t-c', -400)">←</div>
+            <div id="reel-t-c" class="horizontal-scroll">
+                <div class="card"><iframe src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">THE LAST CONFESSION</p></div>
+                <div class="card"><iframe src="https://drive.google.com/file/d/1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">FRACTURED TIES</p></div>
+                <div class="card"><iframe src="https://drive.google.com/file/d/1aaOZ9eb9KrFEOIuobQy6uJQ42Zsgh9Xy/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">DIE MENTIONS IN DIMENSIONS</p></div>
+                <div class="card"><iframe src="https://drive.google.com/file/d/1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">FACED DEFACED</p></div>
+                <div class="card"><iframe src="https://drive.google.com/file/d/1DHGok1r_3wFp5CBtQWj2NSVjsUK04eMp/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">PERISHABLE CHERISHABLES</p></div>
+                <div class="card"><iframe src="https://drive.google.com/file/d/1ZfHMeB_j30bYe_C2cAbinsxMBSOoBxxw/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">SINS AND SECRETS</p></div>
+            </div>
+            <div class="btn-nav btn-next" onclick="scrollR('reel-t-c', 400)">→</div>
+        </div>
+    </section>
+
+    <section id="photo" class="page-section">
+        <h2 class="huge-title text-6xl mb-20 uppercase">Photography</h2>
+        <div class="reel-container">
+            <h3 class="reel-title">Completed Series</h3>
+            <div class="btn-nav btn-prev" onclick="scrollR('reel-p-c', -400)">←</div>
+            <div id="reel-p-c" class="horizontal-scroll">
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800" class="w-full grayscale hover:grayscale-0 transition duration-700"><p class="mt-4 text-center text-[10px] tracking-widest">CALM</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800" class="w-full grayscale hover:grayscale-0 transition duration-700"><p class="mt-4 text-center text-[10px] tracking-widest">IRON</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800" class="w-full grayscale hover:grayscale-0 transition duration-700"><p class="mt-4 text-center text-[10px] tracking-widest">ORDER</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800" class="w-full grayscale hover:grayscale-0 transition duration-700"><p class="mt-4 text-center text-[10px] tracking-widest">UNITY</p></div>
+            </div>
+            <div class="btn-nav btn-next" onclick="scrollR('reel-p-c', 400)">→</div>
+        </div>
+        <div class="mt-20 p-20 bg-[#ff6b00] text-black">
+             <h3 class="text-6xl font-black">UPCOMING: WHY?</h3>
+             <p class="uppercase tracking-widest mt-4">A Photobook by Darwin Wanjiru</p>
+        </div>
+    </section>
+
+    <section id="collab" class="page-section">
+        <h2 class="huge-title text-6xl mb-20 uppercase">Collaborate</h2>
+        <div class="grid md:grid-cols-2 gap-20">
+            <div>
+                <p class="text-xl leading-relaxed mb-10 opacity-70">Investing in a vision geared towards tackling the common crisis through the lens of human dignity and emotional realism.</p>
+                <button class="border-2 border-[#ff6b00] px-10 py-4 text-[#ff6b00] font-black uppercase tracking-widest hover:bg-[#ff6b00] hover:text-black transition">Donate: M-PESA 6880821</button>
+            </div>
+            <div class="text-[10px] uppercase tracking-widest space-y-4">
+                <p>Business Name: Foreign Box Ventures</p>
+                <p>Phone: +254 708 813 147</p>
+            </div>
+        </div>
+    </section>
 
     <script>
-        // NAVIGATION LOGIC [cite: 8, 17]
-        function navTo(page) {
-            const pages = ['home-page', 'film-page', 'photo-page', 'theatre-page', 'collaborate-page'];
-            pages.forEach(p => {
-                document.getElementById(p).style.display = p.includes(page) ? 'block' : 'none';
-            });
-            // Background shift [cite: 44]
-            const bgVideo = document.getElementById('main-bg-video');
-            if(page === 'film') bgVideo.src = "https://www.youtube.com/embed/7sP2mw_k7RQ?autoplay=1&mute=1&controls=0&loop=1";
+        // Page Switching [cite: 8, 17]
+        function showPage(id) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('n-' + id).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        // TYPING EFFECT [cite: 21]
-        const text = "I am an independent international filmmaker from Kenya...";
+        // Horizontal Scrolling 
+        function scrollR(id, dist) {
+            document.getElementById(id).scrollBy({ left: dist, behavior: 'smooth' });
+        }
+
+        // Typewriter Effect [cite: 21]
+        const text = "Independent filmmaker from Kenya with a passion for producing stories that first entertain, then educate. Utilizing film as a transformative tool to reveal human dignity.";
         let i = 0;
-        function typeWriter() {
+        function type() {
             if (i < text.length) {
-                document.getElementById("intro-statement").innerHTML += text.charAt(i);
+                document.getElementById("typewriter").innerHTML += text.charAt(i);
                 i++;
-                setTimeout(typeWriter, 30);
+                setTimeout(type, 30);
             }
         }
-        window.onload = typeWriter;
+        window.onload = type;
 
-        // SECURITY: Block Right Click [cite: 132]
-        document.addEventListener('contextmenu', event => event.preventDefault());
+        // Anti-Download Security 
+        document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
 </html>
