@@ -3,171 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darwin Wanjiru | Director & Producer</title>
+    <title>Darwin Wanjiru | Cinematic Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;900&display=swap" rel="stylesheet">
     <style>
-        :root { --orange: #ff6b00; --dark-orange: #cc5500; --obsidian: #0a0a0a; }
-        body { background-color: var(--obsidian); color: #fff; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        h1, h2 { font-family: 'Playfair Display', serif; }
-        
-        .nav-link { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; transition: 0.3s; }
-        .nav-link:hover { color: var(--orange); }
+        :root { --orange: #ff6b00; --obsidian: #050505; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        body { background-color: var(--obsidian); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* Multi-Page Simulation */
-        .page-section { display: none; min-height: 100vh; padding-top: 100px; }
-        .page-section.active { display: block; }
+        /* Background Video Layer */
+        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .video-bg iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; opacity: 0.4; filter: grayscale(100%) contrast(120%); }
 
-        /* Horizontal Scroll with Buttons */
-        .reel-container { position: relative; display: flex; align-items: center; }
-        .horizontal-reel { display: flex; overflow-x: auto; gap: 2rem; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; padding: 20px 0; }
+        /* DDP-Style Overlay */
+        .overlay-vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, var(--obsidian) 90%); z-index: 0; pointer-events: none; }
+
+        /* Navigation */
+        nav { z-index: 100; mix-blend-mode: difference; }
+        .nav-link { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; transition: 0.3s; color: #888; }
+        .nav-link:hover, .nav-link.active { color: var(--orange); }
+
+        /* Page Content */
+        .page-content { position: relative; z-index: 10; display: none; padding-top: 15vh; }
+        .page-content.active { display: block; }
+
+        /* Horizontal Reels */
+        .reel-container { position: relative; margin: 40px 0; }
+        .horizontal-reel { display: flex; overflow-x: auto; gap: 3rem; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; padding: 20px 0; }
         .horizontal-reel::-webkit-scrollbar { display: none; }
         
-        .card { min-width: 350px; background: #111; border-bottom: 3px solid var(--orange); transition: 0.4s; position: relative; }
-        .card:hover { transform: scale(1.02); background: #1a1a1a; }
-        
-        .scroll-btn { background: var(--orange); color: black; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 10; position: absolute; font-weight: bold; }
-        .btn-left { left: -20px; }
-        .btn-right { right: -20px; }
+        .card { min-width: 400px; border-left: 1px solid rgba(255,107,0,0.3); padding-left: 20px; transition: 0.5s; }
+        .card:hover { border-left: 1px solid var(--orange); }
 
-        /* Anti-Theft */
-        .media-guard { position: relative; }
-        .media-guard::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; background: rgba(0,0,0,0); }
+        .btn-scroll { background: var(--orange); color: black; padding: 10px; border-radius: 50%; font-size: 10px; cursor: pointer; transition: 0.3s; }
+        .btn-scroll:hover { transform: scale(1.2); }
 
-        .orange-glow { color: var(--orange); text-shadow: 0 0 15px rgba(255,107,0,0.4); }
-        .donate-float { position: fixed; bottom: 30px; right: 30px; z-index: 100; background: var(--orange); color: black; padding: 12px 24px; border-radius: 4px; font-weight: 800; font-size: 12px; }
+        /* Typography */
+        .huge-text { font-size: clamp(3rem, 12vw, 15rem); font-weight: 900; line-height: 0.8; letter-spacing: -0.05em; text-transform: uppercase; }
+        .orange-accent { color: var(--orange); }
+
+        .donate-float { position: fixed; bottom: 40px; right: 40px; z-index: 100; border: 1px solid var(--orange); color: var(--orange); padding: 15px 30px; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
+        .donate-float:hover { background: var(--orange); color: black; }
     </style>
 </head>
 <body>
 
-    <nav class="fixed top-0 w-full p-8 z-[100] flex justify-between items-center bg-gradient-to-b from-black to-transparent">
-        <div class="font-black text-2xl orange-glow cursor-pointer" onclick="showPage('dw')">D.W.</div>
-        <div class="hidden md:flex space-x-8">
-            <a href="javascript:void(0)" onclick="showPage('dw')" class="nav-link">Home</a>
-            <a href="javascript:void(0)" onclick="showPage('film')" class="nav-link">Film</a>
-            <a href="javascript:void(0)" onclick="showPage('theatre')" class="nav-link">Theatre</a>
-            <a href="javascript:void(0)" onclick="showPage('photo')" class="nav-link">Photography</a>
+    <div class="video-bg">
+        <iframe src="https://www.youtube.com/embed/CpL2LXK1U-s?autoplay=1&mute=1&controls=0&loop=1&playlist=CpL2LXK1U-s" frameborder="0"></iframe>
+    </div>
+    <div class="overlay-vignette"></div>
+
+    <nav class="fixed top-0 w-full p-10 flex justify-between items-end">
+        <div>
+            <div class="text-2xl font-black orange-accent tracking-tighter cursor-pointer" onclick="showPage('dw')">D.W.</div>
+        </div>
+        <div class="flex space-x-10">
+            <a href="javascript:void(0)" onclick="showPage('dw')" class="nav-link active" id="link-dw">Home</a>
+            <a href="javascript:void(0)" onclick="showPage('film')" class="nav-link" id="link-film">Film</a>
+            <a href="javascript:void(0)" onclick="showPage('theatre')" class="nav-link" id="link-theatre">Theatre</a>
+            <a href="javascript:void(0)" onclick="showPage('photo')" class="nav-link" id="link-photo">Photography</a>
         </div>
     </nav>
 
-    <a href="mailto:darwinwanjiru254@gmail.com" class="donate-float uppercase tracking-tighter">Invest in Vision</a>
+    <a href="mailto:darwinwanjiru254@gmail.com" class="donate-float">Invest in Vision</a>
 
-    <section id="dw" class="page-section active px-6 md:px-20">
-        <div class="grid md:grid-cols-2 gap-12 items-center min-h-[80vh]">
-            <div>
-                <h1 class="text-7xl md:text-9xl mb-6">DARWIN<br><span class="orange-glow">WANJIRU</span></h1>
-                <p class="text-gray-400 leading-relaxed mb-8 italic">"Film entertains the masses... it also has the extreme potential of educating the masses."</p>
-                <div class="space-y-4 border-l-2 border-orange-600 pl-6 text-sm text-gray-300">
-                    <p>Independent International Filmmaker from Kenya.</p>
-                    <p>Director | Producer | Writer</p>
+    <section id="dw" class="page-content active px-10">
+        <div class="max-w-6xl">
+            <h1 class="huge-text mb-10">DARWIN<br><span class="orange-accent italic">WANJIRU</span></h1>
+            <div class="grid md:grid-cols-2 gap-20">
+                <div class="text-xs uppercase tracking-[0.4em] leading-loose text-gray-400">
+                    Multidisciplinary Independent Filmmaker.<br>
+                    Kenya / International.<br>
+                    <span class="text-white mt-4 block">"Film is a transformative tool used to reveal the dignity, purpose, and value of human life."</span>
                 </div>
-                <div class="flex gap-4 mt-10">
-                    <button onclick="showPage('film')" class="border border-orange-600 px-6 py-2 text-[10px] uppercase hover:bg-orange-600 transition">View Films</button>
-                    <button onclick="showPage('photo')" class="border border-white px-6 py-2 text-[10px] uppercase hover:bg-white hover:text-black transition">Photography</button>
+                <div>
+                    <button onclick="showPage('film')" class="text-xs border-b border-orange-500 pb-2 hover:text-orange-500 transition">EXPLORE THE ARCHIVE ↗</button>
                 </div>
-            </div>
-            <div class="media-guard">
-                <p class="text-[10px] uppercase tracking-widest mb-2 text-orange-500">Director's Reel</p>
-                <iframe class="w-full aspect-video border border-zinc-800" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe>
             </div>
         </div>
     </section>
 
-    <section id="film" class="page-section px-6 md:px-20">
-        <h2 class="text-5xl mb-4">FILM <span class="text-orange-600">/</span></h2>
+    <section id="film" class="page-content px-10">
+        <h2 class="text-6xl font-black mb-10">FILM <span class="orange-accent">REELS</span></h2>
         
-        <h3 class="text-xs tracking-[0.5em] uppercase mb-6 opacity-50">Completed Projects</h3>
         <div class="reel-container">
-            <div class="scroll-btn btn-left" onclick="scrollReel('film-reel', -400)">&lt;</div>
             <div id="film-reel" class="horizontal-reel">
-                <div class="card p-4"><iframe class="w-full aspect-video" src="https://www.youtube.com/embed/CpL2LXK1U-s"></iframe><p class="mt-4 font-bold">1. DRIFT</p></div>
-                <div class="card p-4"><iframe class="w-full aspect-video" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview"></iframe><p class="mt-4 font-bold">2. ME!</p></div>
-                <div class="card p-4"><iframe class="w-full aspect-video" src="https://www.youtube.com/embed/7sP2mw_k7RQ"></iframe><p class="mt-4 font-bold">3. THE MISSING PIECE</p></div>
-                <div class="card p-4"><div class="aspect-video bg-zinc-800 flex items-center justify-center italic">Strokes of Life (Trailer)</div><p class="mt-4 font-bold">4. STROKES OF LIFE</p></div>
-                <div class="card p-4"><iframe class="w-full aspect-video" src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview"></iframe><p class="mt-4 font-bold">5. TOUGH CHANGES</p></div>
-                <div class="card p-4"><iframe class="w-full aspect-video" src="https://www.youtube.com/embed/OQQv0R_SV1I"></iframe><p class="mt-4 font-bold">6. BLESSED CONJECTURE</p></div>
+                <div class="card">
+                    <iframe class="w-full aspect-video mb-4" src="https://www.youtube.com/embed/CpL2LXK1U-s"></iframe>
+                    <h4 class="text-xs font-bold uppercase tracking-widest">01. DRIFT</h4>
+                    <p class="text-[10px] text-gray-500 mt-2">COMPLETED / DIRECTOR</p>
+                </div>
+                <div class="card">
+                    <iframe class="w-full aspect-video mb-4" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview"></iframe>
+                    <h4 class="text-xs font-bold uppercase tracking-widest">02. ME!</h4>
+                    <p class="text-[10px] text-gray-500 mt-2">COMPLETED / EXCERPT</p>
+                </div>
+                <div class="card">
+                    <iframe class="w-full aspect-video mb-4" src="https://www.youtube.com/embed/7sP2mw_k7RQ"></iframe>
+                    <h4 class="text-xs font-bold uppercase tracking-widest">03. THE MISSING PIECE</h4>
+                    <p class="text-[10px] text-gray-500 mt-2">TRAILER / PRODUCER</p>
+                </div>
             </div>
-            <div class="scroll-btn btn-right" onclick="scrollReel('film-reel', 400)">&gt;</div>
+            <div class="mt-8 flex gap-4">
+                <div class="btn-scroll" onclick="scrollReel('film-reel', -450)">←</div>
+                <div class="btn-scroll" onclick="scrollReel('film-reel', 450)">→</div>
+            </div>
         </div>
 
-        <h3 class="text-xs tracking-[0.5em] uppercase mt-20 mb-6 opacity-50">Upcoming in 2026</h3>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-zinc-900 p-8 border-l-4 border-orange-600">
-                <h4 class="text-2xl font-bold">RUN!</h4>
-                <p class="text-sm text-gray-500 mt-2">Short Film - Development Stage</p>
-            </div>
-            <div class="bg-zinc-900 p-8 border-l-4 border-orange-600">
-                <h4 class="text-2xl font-bold">THE WAITING ROOM</h4>
-                <p class="text-sm text-gray-500 mt-2">Short Film - Pre-Production</p>
+        <div class="mt-20">
+            <h3 class="text-xs tracking-widest text-orange-500 mb-8 uppercase">Future Projects</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="p-10 bg-zinc-900/50 backdrop-blur-md border border-white/5 hover:border-orange-500/50 transition">
+                    <span class="text-[10px]">2026</span>
+                    <h4 class="text-2xl font-bold mt-2">RUN!</h4>
+                </div>
+                <div class="p-10 bg-zinc-900/50 backdrop-blur-md border border-white/5 hover:border-orange-500/50 transition">
+                    <span class="text-[10px]">2026</span>
+                    <h4 class="text-2xl font-bold mt-2">THE WAITING ROOM</h4>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="theatre" class="page-section px-6 md:px-20">
-        <h2 class="text-5xl mb-12">THEATRE <span class="text-orange-600">/</span></h2>
-        <div class="reel-container">
-            <div class="scroll-btn btn-left" onclick="scrollReel('theatre-reel', -400)">&lt;</div>
-            <div id="theatre-reel" class="horizontal-reel">
-                <div class="card p-4"><iframe src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview" class="w-full aspect-video"></iframe><p class="mt-2 text-xs">LAST CONFESSION</p></div>
-                <div class="card p-4"><iframe src="https://drive.google.com/file/d/1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF/preview" class="w-full aspect-video"></iframe><p class="mt-2 text-xs">FRACTURED TIES</p></div>
-                <div class="card p-4"><div class="aspect-video bg-zinc-800"></div><p class="mt-2 text-xs">BRAVADO AFICIONADO</p></div>
-                <div class="card p-4"><iframe src="https://drive.google.com/file/d/1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN/preview" class="w-full aspect-video"></iframe><p class="mt-2 text-xs">AFFECTED / FACED DEFACED</p></div>
-                <div class="card p-4"><iframe src="https://drive.google.com/file/d/1ZfHMeB_j30bYe_C2cAbinsxMBSOoBxxw/preview" class="w-full aspect-video"></iframe><p class="mt-2 text-xs">SINS AND SECRETS</p></div>
-            </div>
-            <div class="scroll-btn btn-right" onclick="scrollReel('theatre-reel', 400)">&gt;</div>
+    <section id="theatre" class="page-content px-10">
+        <h2 class="text-6xl font-black mb-10">THEATRE <span class="orange-accent">STAGE</span></h2>
+        <div id="theatre-reel" class="horizontal-reel">
+            <div class="card"><iframe src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview" class="w-full aspect-video mb-4"></iframe><p class="text-xs uppercase">Last Confession</p></div>
+            <div class="card"><iframe src="https://drive.google.com/file/d/1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF/preview" class="w-full aspect-video mb-4"></iframe><p class="text-xs uppercase">Fractured Ties</p></div>
+            <div class="card"><div class="w-full aspect-video bg-zinc-900 mb-4 flex items-center justify-center text-[10px] tracking-widest">SINS & SECRETS</div><p class="text-xs uppercase">Sins and Secrets</p></div>
+        </div>
+        <div class="mt-8 flex gap-4">
+            <div class="btn-scroll" onclick="scrollReel('theatre-reel', -450)">←</div>
+            <div class="btn-scroll" onclick="scrollReel('theatre-reel', 450)">→</div>
         </div>
     </section>
 
-    <section id="photo" class="page-section px-6 md:px-20">
-        <h2 class="text-5xl mb-12">PHOTO <span class="text-orange-600">/</span></h2>
-        <div class="reel-container">
-            <div class="scroll-btn btn-left" onclick="scrollReel('photo-reel', -400)">&lt;</div>
-            <div id="photo-reel" class="horizontal-reel">
-                <div class="card media-guard"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800" class="w-full aspect-square object-cover"><p class="p-2 text-[10px] uppercase">Calm</p></div>
-                <div class="card media-guard"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800" class="w-full aspect-square object-cover"><p class="p-2 text-[10px] uppercase">Unity</p></div>
-                <div class="card media-guard"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800" class="w-full aspect-square object-cover"><p class="p-2 text-[10px] uppercase">IRON</p></div>
-                <div class="card media-guard"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800" class="w-full aspect-square object-cover"><p class="p-2 text-[10px] uppercase">ORDER</p></div>
-            </div>
-            <div class="scroll-btn btn-right" onclick="scrollReel('photo-reel', 400)">&gt;</div>
+    <section id="photo" class="page-content px-10">
+        <h2 class="text-6xl font-black mb-10">STILL <span class="orange-accent">IMAGE</span></h2>
+        <div id="photo-reel" class="horizontal-reel">
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w1000" class="w-full grayscale hover:grayscale-0 transition duration-700 mb-4"><p class="text-xs uppercase tracking-widest">Calm</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w1000" class="w-full grayscale hover:grayscale-0 transition duration-700 mb-4"><p class="text-xs uppercase tracking-widest">Unity</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w1000" class="w-full grayscale hover:grayscale-0 transition duration-700 mb-4"><p class="text-xs uppercase tracking-widest">IRON</p></div>
         </div>
-        <div class="mt-20 p-10 bg-orange-600 text-black">
-            <h4 class="text-4xl font-black italic">UPCOMING: WHY?</h4>
-            <p class="uppercase text-xs font-bold">The Photobook - Coming 2026</p>
+        <div class="mt-8 flex gap-4">
+            <div class="btn-scroll" onclick="scrollReel('photo-reel', -450)">←</div>
+            <div class="btn-scroll" onclick="scrollReel('photo-reel', 450)">→</div>
         </div>
     </section>
-
-    <footer class="mt-20 p-10 border-t border-zinc-900 bg-black">
-        <div class="flex flex-col md:flex-row justify-between gap-10">
-            <div>
-                <p class="orange-glow font-bold">darwinwanjiru254@gmail.com</p>
-                <p>+254 708 813 147</p>
-            </div>
-            <div class="text-right">
-                <p class="text-[10px] uppercase tracking-widest text-gray-600">Glimpse of Heaven Productions</p>
-                <a href="https://www.instagram.com/glimpseofheaven.productions" class="text-xs underline block mt-2">Instagram</a>
-                <a href="https://youtube.com/@glimpseofheavenproductions" class="text-xs underline block">YouTube</a>
-            </div>
-        </div>
-    </footer>
 
     <script>
-        // Page Switching Logic
+        // PAGE NAVIGATION
         function showPage(pageId) {
-            document.querySelectorAll('.page-section').forEach(section => {
-                section.classList.remove('active');
-            });
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
             document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0, 0);
+            document.getElementById('link-' + pageId).classList.add('active');
+            window.scrollTo(0,0);
+            
+            // GSAP Entry Animation
+            gsap.from("#" + pageId, { opacity: 0, y: 20, duration: 1, ease: "power4.out" });
         }
 
-        // Horizontal Scroll Buttons
-        function scrollReel(reelId, distance) {
-            document.getElementById(reelId).scrollBy({ left: distance, behavior: 'smooth' });
+        // REEL SCROLLING
+        function scrollReel(id, dist) {
+            document.getElementById(id).scrollBy({ left: dist, behavior: 'smooth' });
         }
 
-        // Global Anti-Right Click
-        document.addEventListener('contextmenu', event => event.preventDefault());
+        // ANTI-RIGHT CLICK
+        document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
 </html>
