@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darwin Wanjiru | Multidisciplinary Artist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        body { background-color: #000; color: #fff; font-family: 'Helvetica Neue', sans-serif; overflow-x: hidden; }
+        .cinematic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; filter: grayscale(100%); }
+        .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 5vw; border-bottom: 1px solid #1a1a1a; }
+        .hero-text { font-size: clamp(3rem, 12vw, 10rem); font-weight: 900; line-height: 0.8; letter-spacing: -0.05em; }
+        .nav-link { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; transition: 0.4s; }
+        .nav-link:hover { color: #ff0000; letter-spacing: 0.6em; }
+        iframe { border-radius: 4px; border: 1px solid #333; }
+        .cursor { width: 20px; height: 20px; border: 1px solid white; border-radius: 50%; position: fixed; pointer-events: none; z-index: 999; transition: 0.1s; }
+    </style>
+</head>
+<body>
+
+    <div class="cursor hidden md:block" id="cursor"></div>
+
+    <div class="cinematic-bg">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/OQQv0R_SV1I?autoplay=1&mute=1&controls=0&loop=1&playlist=OQQv0R_SV1I" frameborder="0"></iframe>
+    </div>
+
+    <nav class="fixed top-0 left-0 w-full p-10 z-50 flex justify-between items-center mix-blend-difference">
+        <div class="text-2xl font-black">DW.</div>
+        <div class="hidden md:flex space-x-12">
+            <a href="#portfolio" class="nav-link">Work</a>
+            <a href="#upcoming" class="nav-link">Upcoming</a>
+            <a href="#press" class="nav-link">Press</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <section class="section">
+        <h1 class="hero-text" id="hero-name">DARWIN<br>WANJIRU</h1>
+        <p class="mt-10 text-gray-400 tracking-widest uppercase text-sm">A Dynamic Embodiment of Modern Art</p>
+    </section>
+
+    <section id="portfolio" class="section bg-black/80 backdrop-blur-md">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+            <div>
+                <h2 class="text-7xl font-bold mb-10">THE<br>WORK</h2>
+                <p class="text-gray-400 max-w-sm mb-10">Exploring the intersection of Film, Theatre, and Written Word through a social-realist lens.</p>
+                
+                <div class="space-y-4">
+                    <button onclick="window.open('https://drive.google.com/drive/folders/1z2Yz5op-BxyR0rivk98KR2_Dq0pzBqHu')" class="w-full text-left p-6 border border-white/20 hover:bg-white hover:text-black transition uppercase text-xs font-bold tracking-widest">View Photography Portfolio ↗</button>
+                    <button onclick="window.open('https://drive.google.com/drive/folders/1iywBUicIJiioExok55gXd_wYygVYcIrj')" class="w-full text-left p-6 border border-white/20 hover:bg-white hover:text-black transition uppercase text-xs font-bold tracking-widest">Theatre Archive ↗</button>
+                </div>
+            </div>
+            
+            <div class="space-y-12">
+                <div>
+                    <h3 class="text-xs uppercase tracking-tighter text-red-600 mb-2">The Missing Piece</h3>
+                    <iframe class="w-full aspect-video" src="https://drive.google.com/file/d/127GR5-yh-oyM3acAE091_Qy-jx2nVggM/preview"></iframe>
+                </div>
+                <div>
+                    <h3 class="text-xs uppercase tracking-tighter text-red-600 mb-2">ME! - Short Film (2025)</h3>
+                    <iframe class="w-full aspect-video" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview"></iframe>
+                </div>
+                <div>
+                    <h3 class="text-xs uppercase tracking-tighter text-red-600 mb-2">Strokes of Life</h3>
+                    <iframe class="w-full aspect-video" src="https://drive.google.com/file/d/13rSIKFPcV6y9V6HqFi1Xx7DdClKnbYeo/preview"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="upcoming" class="section bg-zinc-900">
+        <div class="max-w-4xl">
+            <h2 class="text-5xl font-black mb-10 uppercase">Upcoming Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="p-8 border border-white/10">
+                    <h4 class="font-bold">DRIFT! (2025)</h4>
+                    <p class="text-sm text-gray-500 mt-2">Currently in post-production. A visual exploration of movement and identity.</p>
+                </div>
+                <div class="p-8 border border-red-600/30 bg-red-600/5">
+                    <h4 class="font-bold">SUPPORT THE CRAFT</h4>
+                    <p class="text-sm text-gray-400 mt-2 mb-6">Contribute to the upcoming theatre season and independent film projects.</p>
+                    <a href="#" class="bg-white text-black px-6 py-2 text-xs font-bold uppercase tracking-widest">Donate Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="press" class="section">
+        <h2 class="text-2xl mb-10 opacity-50">SELECTED PRESS</h2>
+        <div class="space-y-10">
+            <a href="https://vgik.info/today/creativelife/detail.php?ID=11061" target="_blank" class="block group">
+                <h3 class="text-4xl md:text-6xl font-bold group-hover:italic transition-all">VGIK INTERNATIONAL SESSION ↗</h3>
+                <p class="text-gray-500">Participant of Russian and African Filmmakers - Senegal</p>
+            </a>
+            <div class="block group">
+                <h3 class="text-4xl md:text-6xl font-bold group-hover:italic transition-all">EBRU TV FEATURES</h3>
+                <p class="text-gray-500">Dialogue on the evolution of Theatre Arts in East Africa</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section text-center items-center">
+        <h2 class="text-8xl font-black mb-10">CONTACT.</h2>
+        <p class="text-xl max-w-xl mx-auto mb-10 text-gray-400">Available for directorial commissions, photography bookings, and collaborative storytelling.</p>
+        <a href="mailto:darwinwanjiru@email.com" class="text-3xl underline font-light hover:text-red-600 transition">Email Darwin</a>
+    </section>
+
+    <footer class="p-10 text-[10px] text-gray-700 tracking-[1em] text-center uppercase">
+        © 2025 Darwin Wanjiru • Dynamic Artist
+    </footer>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Animations
+        gsap.from("#hero-name", { duration: 2, y: 100, opacity: 0, ease: "power4.out" });
+        
+        gsap.utils.toArray(".section").forEach(section => {
+            gsap.from(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1.2
+            });
+        });
+    </script>
+</body>
+</html>
