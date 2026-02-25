@@ -6,50 +6,60 @@
     <title>Darwin Wanjiru | Multidisciplinary Artist</title>
     <link rel="icon" href="https://drive.google.com/thumbnail?id=1NxbOH7rq00dUIzJfnLOP_-o4liuZhyu9&sz=w32" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
     <style>
         :root { --orange: #ff6b00; --obsidian: #050505; --gold-grad: linear-gradient(135deg, #ffae00, #ff6b00, #ff3d00); }
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         body { background-color: var(--obsidian); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        #dot-cursor { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; mix-blend-mode: difference; }
-
-        /* Cinematic Background Engine (Updated to YouTube) */
-        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.15; filter: grayscale(100%); pointer-events: none; }
-        .video-bg iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        
+        /* Custom Dot Cursor */
+        #dot-cursor { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; mix-blend-mode: difference; transition: transform 0.2s ease; }
+        
+        /* Cinematic Background Engine (Breathing Effect) */
+        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.15; filter: grayscale(100%) contrast(120%); pointer-events: none; overflow: hidden; }
+        .video-bg iframe { width: 120vw; height: 67.5vw; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: cinematicBreath 30s infinite alternate ease-in-out; pointer-events: none; }
+        @keyframes cinematicBreath { 0% { transform: translate(-50%, -50%) scale(1); } 100% { transform: translate(-50%, -50%) scale(1.15); } }
 
         /* Navigation */
         nav { z-index: 1000; mix-blend-mode: difference; }
-        .nav-link { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; color: #666; transition: 0.3s; }
-        .nav-link.active, .nav-link:hover { color: var(--orange); }
+        .nav-link { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; color: #666; transition: 0.3s; display: inline-block; }
+        .nav-link.active, .nav-link:hover { color: var(--orange); transform: translateX(-5px); }
         .grad-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Unified Card Sizes */
-        .card { min-width: 480px; height: 380px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 20px; transition: 0.5s; flex-shrink: 0; display: flex; flex-direction: column; }
-        .card:hover { border-color: var(--orange); transform: translateY(-10px); }
-        .media-box { width: 100%; height: 260px; background: #000; overflow: hidden; position: relative; }
+        /* 3D Flex Cards & Black/White Effect */
+        .horizontal-scroll { display: flex; overflow-x: auto; gap: 40px; scrollbar-width: none; scroll-behavior: smooth; padding: 40px 0; perspective: 1500px; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+        
+        .card { min-width: 480px; height: 380px; background: rgba(10,10,10,0.6); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        .card:hover { border-color: var(--orange); transform: translateY(-15px) scale(1.02); box-shadow: 0 20px 40px rgba(255,107,0,0.15); z-index: 10; }
+        
+        .media-box { width: 100%; height: 260px; background: #000; overflow: hidden; position: relative; filter: grayscale(100%) brightness(0.6); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+        .card:hover .media-box { filter: grayscale(0%) brightness(1); transform: scale(1.05); }
         .media-box iframe, .media-box img { width: 100%; height: 100%; object-fit: cover; }
 
         /* Floating Nav Arrows */
-        .side-arrow { position: fixed; top: 55%; transform: translateY(-50%); width: 60px; height: 60px; background: rgba(255,107,0,0.1); border: 1px solid var(--orange); color: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; z-index: 100; transition: 0.3s; border-radius: 50%; }
-        .side-arrow:hover { background: var(--orange); color: #000; }
-        .arrow-left { left: 20px; }
-        .arrow-right { right: 20px; }
+        .side-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: 60px; height: 60px; background: rgba(255,107,0,0.05); border: 1px solid rgba(255,107,0,0.3); color: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; z-index: 100; transition: all 0.4s ease; border-radius: 50%; backdrop-filter: blur(5px); }
+        .side-arrow:hover { background: var(--orange); color: #000; transform: translateY(-50%) scale(1.1); }
+        .arrow-left { left: 30px; }
+        .arrow-right { right: 30px; }
 
         /* HUD Footer */
         .hud { position: fixed; bottom: 30px; z-index: 100; mix-blend-mode: difference; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; }
         .hud-left { left: 40px; }
         .hud-right { right: 40px; text-align: right; }
-        .hud-center { bottom: 15px; left: 50%; transform: translateX(-50%); opacity: 0.4; white-space: nowrap; }
+        .hud-center { bottom: 15px; left: 50%; transform: translateX(-50%); opacity: 0.4; white-space: nowrap; transition: 0.3s; }
         
-        /* Lowered Invest Button (Change 4) */
-        .donate-btn { position: fixed; bottom: 120px; right: 40px; transform: rotate(90deg); transform-origin: right; z-index: 101; border: 1px solid var(--orange); color: var(--orange); padding: 10px 25px; font-size: 10px; background: transparent; }
+        /* Invest Button Repositioned */
+        .donate-btn { position: fixed; bottom: 130px; right: 40px; z-index: 101; border: 1px solid var(--orange); color: var(--orange); padding: 15px 10px; font-size: 10px; background: transparent; transition: 0.4s; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 4px; }
+        .donate-btn:hover { background: var(--orange); color: #000; box-shadow: 0 0 20px rgba(255,107,0,0.4); }
 
         .page-section { display: none; padding: 12vh 8vw; min-height: 100vh; position: relative; z-index: 10; }
         .page-section.active { display: block; }
-        .horizontal-scroll { display: flex; overflow-x: auto; gap: 40px; scrollbar-width: none; scroll-behavior: smooth; padding: 20px 0; }
         
-        .slideshow-media { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.5s; }
-        .slideshow-media.active { opacity: 1; }
+        /* Interactive Slideshows */
+        .slideshow-media { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.5s ease-in-out; }
+        .slideshow-media.active { opacity: 1; transform: scale(1.05); } /* Subtle zoom during slide */
     </style>
 </head>
 <body>
@@ -63,14 +73,14 @@
     <div class="hud hud-left"><p>+254 708 813 147</p><p>darwinwanjiru254@gmail.com</p></div>
     <div class="hud hud-center uppercase">Glimpse of Heaven • Oosberg • HWC • Igiza Arts • Creative Box • Artofunnex • Hamptons</div>
     <div class="hud hud-right">
-        <a href="https://instagram.com/glimpseofheaven.productions" target="_blank">INSTAGRAM</a><br>
-        <a href="mailto:glimpseofheaven.productions@gmail.com">EMAIL</a><br> <a href="https://youtube.com/@glimpseofheavenproductions" target="_blank">YOUTUBE</a>
+        <a href="https://instagram.com/glimpseofheaven.productions" target="_blank" class="hover:text-orange-500 transition">INSTAGRAM</a><br>
+        <a href="mailto:glimpseofheaven.productions@gmail.com" class="hover:text-orange-500 transition">EMAIL</a><br>
+        <a href="https://youtube.com/@glimpseofheavenproductions" target="_blank" class="hover:text-orange-500 transition">YOUTUBE</a>
     </div>
-
     <button onclick="showPage('collab')" class="donate-btn uppercase">Invest in Vision</button>
 
-    <div class="side-arrow arrow-left" onclick="scrollSection(-500)">&#8592;</div>
-    <div class="side-arrow arrow-right" onclick="scrollSection(500)">&#8594;</div>
+    <div class="side-arrow arrow-left" onclick="scrollSection(-600)">&#8592;</div>
+    <div class="side-arrow arrow-right" onclick="scrollSection(600)">&#8594;</div>
 
     <nav class="fixed top-0 w-full p-10 flex justify-between items-start">
         <div class="text-3xl font-black grad-text tracking-tighter cursor-pointer" onclick="showPage('home')">OOSBERG</div>
@@ -84,99 +94,114 @@
     </nav>
 
     <section id="home" class="page-section active">
-        <h1 class="text-8xl font-black grad-text leading-none uppercase mb-20">DARWIN<br>WANJIRU</h1>
+        <h1 class="text-8xl font-black grad-text leading-none uppercase mb-20 gsap-element">DARWIN<br>WANJIRU</h1>
         <div class="grid md:grid-cols-2 gap-20">
-            <div id="typewriter" class="text-[11px] uppercase tracking-[0.4em] leading-[2.5] opacity-70"></div>
-            <div class="media-box"><iframe src="https://www.youtube.com/embed/ns7Pc2s471Q?autoplay=1&mute=1&loop=1&playlist=ns7Pc2s471Q"></iframe></div>
+            <div id="typewriter" class="text-[11px] uppercase tracking-[0.4em] leading-[2.5] opacity-70 gsap-element"></div>
+            <div class="card gsap-element" style="height: auto; min-width: 100%;">
+                <div class="media-box rounded-sm" style="height: 100%; aspect-ratio: 16/9;">
+                    <iframe src="https://www.youtube.com/embed/ns7Pc2s471Q?autoplay=1&mute=1&loop=1&playlist=ns7Pc2s471Q"></iframe>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="film" class="page-section">
-        <h2 class="text-6xl font-black mb-12 grad-text">FILM</h2>
-        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50">Completed Projects</h3>
+        <h2 class="text-6xl font-black mb-12 grad-text gsap-element">FILM</h2>
+        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50 gsap-element">Completed Projects</h3>
         <div class="horizontal-scroll">
-            <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/CpL2LXK1U-s?autoplay=1&mute=1&loop=1&playlist=CpL2LXK1U-s"></iframe></div><p class="mt-4 text-[10px] font-bold">DRIFT (2025)</p></div>
-            <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/_IASmH33JP4?autoplay=1&mute=1&loop=1&playlist=_IASmH33JP4"></iframe></div><p class="mt-4 text-[10px] font-bold">ME! (2025)</p></div> <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/7sP2mw_k7RQ?autoplay=1&mute=1&loop=1&playlist=7sP2mw_k7RQ"></iframe></div><p class="mt-4 text-[10px] font-bold">THE MISSING PIECE (2025)</p></div> <div class="card"><div class="media-box slideshow" data-imgs="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu"></div><p class="mt-4 text-[10px] font-bold uppercase">Strokes of Life (2024)</p></div>
-            <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/D8KrUQoMqlg?autoplay=1&mute=1&loop=1&playlist=D8KrUQoMqlg"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">Tough Changes (2022)</p></div> <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/OQQv0R_SV1I?autoplay=1&mute=1&loop=1&playlist=OQQv0R_SV1I"></iframe></div><p class="mt-4 text-[10px] font-bold">BIASED CONJECTURE</p></div>
+            <div class="card gsap-card"><div class="media-box"><iframe src="https://www.youtube.com/embed/CpL2LXK1U-s?autoplay=1&mute=1&loop=1&playlist=CpL2LXK1U-s"></iframe></div><p class="mt-4 text-[10px] font-bold">DRIFT (2025)</p></div>
+            <div class="card gsap-card"><div class="media-box"><iframe src="https://www.youtube.com/embed/_IASmH33JP4?autoplay=1&mute=1&loop=1&playlist=_IASmH33JP4"></iframe></div><p class="mt-4 text-[10px] font-bold">ME! (2025)</p></div>
+            <div class="card gsap-card"><div class="media-box"><iframe src="https://www.youtube.com/embed/7sP2mw_k7RQ?autoplay=1&mute=1&loop=1&playlist=7sP2mw_k7RQ"></iframe></div><p class="mt-4 text-[10px] font-bold">THE MISSING PIECE (2025)</p></div>
+            <div class="card gsap-card"><div class="media-box slideshow" data-imgs="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu"></div><p class="mt-4 text-[10px] font-bold uppercase">Strokes of Life (2024)</p></div>
+            <div class="card gsap-card"><div class="media-box"><iframe src="https://www.youtube.com/embed/D8KrUQoMqlg?autoplay=1&mute=1&loop=1&playlist=D8KrUQoMqlg"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">Tough Changes (2022)</p></div>
+            <div class="card gsap-card"><div class="media-box"><iframe src="https://www.youtube.com/embed/OQQv0R_SV1I?autoplay=1&mute=1&loop=1&playlist=OQQv0R_SV1I"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">Biased Conjecture</p></div>
         </div>
-        <h3 class="text-[10px] tracking-[5px] uppercase mt-20 mb-6 opacity-50">Upcoming Projects</h3>
+        <h3 class="text-[10px] tracking-[5px] uppercase mt-20 mb-6 opacity-50 gsap-element">Upcoming Projects</h3>
         <div class="horizontal-scroll">
-            <div class="card"><div class="media-box slideshow" data-imgs="165MRSFz8YtajUhQWoC6OhInk0TLmEkwN,1qbTa10fJN9-z3l_KyX0Bw95Pphx1AuVp"></div><p class="mt-4 text-[10px] font-bold uppercase">RUN! (2026)</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1my6FJ_mZWEqm5GADm6HZReyXZJfluTou&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">THE WAITING ROOM (2026)</p></div>
+            <div class="card gsap-card"><div class="media-box slideshow" data-imgs="165MRSFz8YtajUhQWoC6OhInk0TLmEkwN,1qbTa10fJN9-z3l_KyX0Bw95Pphx1AuVp"></div><p class="mt-4 text-[10px] font-bold uppercase">RUN! (2026)</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1my6FJ_mZWEqm5GADm6HZReyXZJfluTou&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">THE WAITING ROOM (2026)</p></div>
         </div>
     </section>
 
     <section id="theatre" class="page-section">
-        <h2 class="text-6xl font-black mb-12 grad-text">THEATRE</h2>
-        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50">Completed Plays</h3>
+        <h2 class="text-6xl font-black mb-12 grad-text gsap-element">THEATRE</h2>
+        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50 gsap-element">Completed Plays</h3>
         <div class="horizontal-scroll">
-            <div class="card">
-                <div class="media-box slideshow" data-vids="Pa2g9GtZ8o8,CjGAylD2Qok,UdLLW03JxAg"></div>
-                <p class="mt-4 text-[10px] font-bold uppercase">The Last Confession (2025)</p>
-            </div>
-            <div class="card"><div class="media-box slideshow" data-imgs="1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF,1UIP92GwS_XcAhTF2p8Pgc3AIKak-WYzD"></div><p class="mt-4 text-[10px] font-bold uppercase">Fractured Ties (2025)</p></div>
-            <div class="card"><div class="media-box slideshow" data-imgs="1aaOZ9eb9KrFEOIuobQy6uJQ42Zsgh9Xy,1euSwDVMs_CTsMSyTDNtKxz0TNjkFiqLr,1rD0ynxkRoPk9LtQF8VakonIewGHXgNHT"></div><p class="mt-4 text-[10px] font-bold uppercase">Die Mentions in Dimensions (2022)</p></div>
-            <div class="card"><div class="media-box slideshow" data-imgs="1PXgfxZzfPIkIDKjvO4pfxzQX9cHhxw7j,1S9kdDS26yWSGv9v4wKQDhMsoLy6B9pLr,1uw5oxBPG-Gl8feRHTr2iU-SxdB6tKZzN"></div><p class="mt-4 text-[10px] font-bold uppercase">Bravado Aficionado (2019)</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Faced Defaced (2019)</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1DHGok1r_3wFp5CBtQWj2NSVjsUK04eMp&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Perishable Cherishables (2018)</p></div>
-            <div class="card"><div class="media-box slideshow" data-imgs="1ZfHMeB_j30bYe_C2cAbinsxMBSOoBxxw,1JR9I6dqPHWMLvGgIWO4aeQasUr7RKAUU"></div><p class="mt-4 text-[10px] font-bold uppercase">Sins and Secrets (2018)</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1D9A4H9dBJNywLMHCdxZraiUgL57l_xLf&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Affected (2020)</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1TX5q891Jm_iEp7q94okuRPto3uN8nANO&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Neighborhood Watch (2022)</p></div>
+            <div class="card gsap-card"><div class="media-box slideshow" data-vids="Pa2g9GtZ8o8,CjGAylD2Qok,UdLLW03JxAg"></div><p class="mt-4 text-[10px] font-bold uppercase">The Last Confession (2025)</p></div>
+            <div class="card gsap-card"><div class="media-box slideshow" data-imgs="1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF,1UIP92GwS_XcAhTF2p8Pgc3AIKak-WYzD"></div><p class="mt-4 text-[10px] font-bold uppercase">Fractured Ties (2025)</p></div>
+            <div class="card gsap-card"><div class="media-box slideshow" data-imgs="1aaOZ9eb9KrFEOIuobQy6uJQ42Zsgh9Xy,1euSwDVMs_CTsMSyTDNtKxz0TNjkFiqLr,1rD0ynxkRoPk9LtQF8VakonIewGHXgNHT"></div><p class="mt-4 text-[10px] font-bold uppercase">Die Mentions in Dimensions (2022)</p></div>
+            <div class="card gsap-card"><div class="media-box slideshow" data-imgs="1PXgfxZzfPIkIDKjvO4pfxzQX9cHhxw7j,1S9kdDS26yWSGv9v4wKQDhMsoLy6B9pLr,1uw5oxBPG-Gl8feRHTr2iU-SxdB6tKZzN"></div><p class="mt-4 text-[10px] font-bold uppercase">Bravado Aficionado (2019)</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Faced Defaced (2019)</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1DHGok1r_3wFp5CBtQWj2NSVjsUK04eMp&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Perishable Cherishables (2018)</p></div>
+            <div class="card gsap-card"><div class="media-box slideshow" data-imgs="1ZfHMeB_j30bYe_C2cAbinsxMBSOoBxxw,1JR9I6dqPHWMLvGgIWO4aeQasUr7RKAUU"></div><p class="mt-4 text-[10px] font-bold uppercase">Sins and Secrets (2018)</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1D9A4H9dBJNywLMHCdxZraiUgL57l_xLf&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Affected (2020)</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1TX5q891Jm_iEp7q94okuRPto3uN8nANO&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Neighborhood Watch (2022)</p></div>
         </div>
-        <h3 class="text-[10px] tracking-[5px] uppercase mt-20 mb-6 opacity-50">Upcoming Project</h3>
-        <div class="card"><div class="media-box bg-white/5 flex items-center justify-center p-10 text-[10px] tracking-widest text-center">THE BLACK SHEEP<br>(Stage Production)</div><p class="mt-4 text-[10px] font-bold uppercase">The Black Sheep</p></div>
+        <h3 class="text-[10px] tracking-[5px] uppercase mt-20 mb-6 opacity-50 gsap-element">Upcoming Project</h3>
+        <div class="card gsap-card"><div class="media-box bg-white/5 flex items-center justify-center p-10 text-[10px] tracking-widest text-center">THE BLACK SHEEP<br>(Stage Production)</div><p class="mt-4 text-[10px] font-bold uppercase">The Black Sheep</p></div>
     </section>
 
     <section id="photo" class="page-section">
-        <h2 class="text-6xl font-black mb-12 grad-text">PHOTOGRAPHY</h2>
-        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50">Listed Works</h3>
+        <h2 class="text-6xl font-black mb-12 grad-text gsap-element">PHOTOGRAPHY</h2>
+        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50 gsap-element">Listed Works</h3>
         <div class="horizontal-scroll">
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Calm</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Iron</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Order</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LX0unSMVlrCXMqP3A5tUY15isJXeV66J&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Beholder</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Unity</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1Mg2DkIj47N8QQ4Adyfn5M-gkjX7wn7MW&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Natural</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1WELCtmX_SMlHCtOMNUMJnkAAyCIbdkMY&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Focus</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1Lgw45_Nkear7VQSYNf189oX87yUpzuxD&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Frame</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1_Us2hseIoji9idiAwVhQRJNTOaU9Agx_&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Interaction</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1UgeewGbBXYGNmTQ29LrtnknMeT_JNaO4&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Urban</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LdaFCwXBNmQzOrwcxh7IQOx1CbqbjbGL&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">People</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1vQMPlALwePYkfRqERSq3whQkrAM4rR-A&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">There It Is</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Calm</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Order</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LX0unSMVlrCXMqP3A5tUY15isJXeV66J&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Beholder</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Unity</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1Mg2DkIj47N8QQ4Adyfn5M-gkjX7wn7MW&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Natural</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1WELCtmX_SMlHCtOMNUMJnkAAyCIbdkMY&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Focus</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1Lgw45_Nkear7VQSYNf189oX87yUpzuxD&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Frame</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1_Us2hseIoji9idiAwVhQRJNTOaU9Agx_&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Interaction</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1UgeewGbBXYGNmTQ29LrtnknMeT_JNaO4&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Urban</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LdaFCwXBNmQzOrwcxh7IQOx1CbqbjbGL&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">People</p></div>
+            <div class="card gsap-card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1vQMPlALwePYkfRqERSq3whQkrAM4rR-A&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">There It Is</p></div>
         </div>
+        <h3 class="text-[10px] tracking-[5px] uppercase mt-20 mb-6 opacity-50 gsap-element">Upcoming Project</h3>
+        <div class="card gsap-card"><div class="media-box bg-white/5 flex items-center justify-center p-10 text-[10px] tracking-widest text-center">WHY – A photobook by Darwin Wanjiru.<br>(Environmental Awareness)</div><p class="mt-4 text-[10px] font-bold uppercase">WHY Photobook</p></div>
     </section>
 
     <section id="collab" class="page-section">
-        <h2 class="text-7xl font-black grad-text mb-12 uppercase">Collaborate</h2>
+        <h2 class="text-7xl font-black grad-text mb-12 uppercase gsap-element">Collaborate</h2>
         <div class="grid md:grid-cols-2 gap-10 mb-20">
-            <div class="border border-white/10 p-12 bg-white/5"><h3 class="text-orange-500 text-[10px] mb-6 uppercase">Engage</h3><p class="text-[10px] mb-8 uppercase">Follow Glimpse of Heaven Productions.</p>
+            <div class="card gsap-card" style="height: auto;"><h3 class="text-orange-500 text-[10px] mb-6 uppercase">Engage</h3><p class="text-[10px] mb-8 uppercase">Follow Glimpse of Heaven Productions.</p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="https://instagram.com/glimpseofheaven.productions" class="text-[9px] border border-white/20 px-4 py-2 hover:bg-white hover:text-black">INSTAGRAM</a>
-                    <a href="https://youtube.com/@glimpseofheavenproductions" class="text-[9px] border border-white/20 px-4 py-2 hover:bg-white hover:text-black">YOUTUBE</a>
-                    <a href="mailto:glimpseofheaven.productions@gmail.com" class="text-[9px] border border-white/20 px-4 py-2 hover:bg-white hover:text-black">EMAIL</a>
+                    <a href="https://instagram.com/glimpseofheaven.productions" class="text-[9px] border border-white/20 px-4 py-2 hover:bg-white hover:text-black transition">INSTAGRAM</a>
+                    <a href="https://youtube.com/@glimpseofheavenproductions" class="text-[9px] border border-white/20 px-4 py-2 hover:bg-white hover:text-black transition">YOUTUBE</a>
+                    <a href="mailto:glimpseofheaven.productions@gmail.com" class="text-[9px] border border-white/20 px-4 py-2 hover:bg-white hover:text-black transition">EMAIL</a>
                 </div>
             </div>
-            <div class="border border-white/10 p-12 bg-white/5"><h3 class="text-orange-500 text-[10px] mb-6 uppercase">Invest</h3><p class="text-[10px] mb-8 uppercase">Support universal storytelling.</p>
+            <div class="card gsap-card" style="height: auto;"><h3 class="text-orange-500 text-[10px] mb-6 uppercase">Invest</h3><p class="text-[10px] mb-8 uppercase">Support universal storytelling.</p>
                 <div class="bg-orange-600/10 p-6 border border-orange-500/30 text-[10px] uppercase tracking-widest leading-relaxed">
-                    Business Name: Foreign box ventures<br>
-                    Till Number: 6880821
+                    Business Name: Foreign box ventures<br>Till Number: 6880821
                 </div>
             </div>
         </div>
-        <h3 class="text-[10px] tracking-[5px] uppercase opacity-50 mb-10">Evidence of Work</h3>
+        <h3 class="text-[10px] tracking-[5px] uppercase opacity-50 mb-10 gsap-element">Evidence of Work</h3>
         <div class="horizontal-scroll">
-            <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/6qDmZ74GbMA?autoplay=1&mute=1&loop=1&playlist=6qDmZ74GbMA"></iframe></div><p class="mt-4 text-[10px] uppercase">Kreative Klinik Workshop</p></div> <div class="card"><div class="media-box"><iframe src="https://drive.google.com/file/d/1emf82nJJiZwuuZClQRxOQFfRJ6KJbKig/preview"></iframe></div><p class="mt-4 text-[10px] uppercase">APAC Youth Congress</p></div> <div class="card"><div class="media-box"><iframe src="https://drive.google.com/file/d/1sRIFOzCf2zQFiM-y_gteSfHSRGlL1Liq/preview"></iframe></div><p class="mt-4 text-[10px] uppercase">First Int. Forum of Filmmakers</p></div> </div>
+            <div class="card gsap-card"><div class="media-box"><iframe src="https://www.youtube.com/embed/6qDmZ74GbMA?autoplay=1&mute=1&loop=1&playlist=6qDmZ74GbMA"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">Kreative Klinik Workshop</p></div>
+            <div class="card gsap-card"><div class="media-box"><iframe src="https://drive.google.com/file/d/1emf82nJJiZwuuZClQRxOQFfRJ6KJbKig/preview"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">APAC Youth Congress</p></div>
+            <div class="card gsap-card"><div class="media-box"><iframe src="https://drive.google.com/file/d/1sRIFOzCf2zQFiM-y_gteSfHSRGlL1Liq/preview"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">First Int. Forum of Filmmakers</p></div>
+        </div>
     </section>
 
     <script>
+        // Custom Cursor Expansion
         const cursor = document.getElementById('dot-cursor');
-        document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+        document.addEventListener('mousemove', e => { 
+            cursor.style.left = e.clientX + 'px'; 
+            cursor.style.top = e.clientY + 'px'; 
+        });
+        document.addEventListener('mousedown', () => cursor.style.transform = 'scale(2)');
+        document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
 
+        // Horizontal Arrow Scrolling
         function scrollSection(val) {
-            const activeScroll = document.querySelector('.page-section.active .horizontal-scroll');
-            if (activeScroll) activeScroll.scrollBy({ left: val, behavior: 'smooth' });
+            const activeScrolls = document.querySelectorAll('.page-section.active .horizontal-scroll');
+            activeScrolls.forEach(scroll => scroll.scrollBy({ left: val, behavior: 'smooth' }));
         }
 
+        // Typewriter (Starts 2 seconds after load)
         const introText = "I am an independent international filmmaker from Kenya with a passion for producing stories that first entertain, then educate society on issues affecting their social and economic well-being.";
         let charIdx = 0;
         function typeEffect() { 
@@ -186,19 +211,40 @@
                 setTimeout(typeEffect, 35); 
             } 
         }
-        
-        // Change 1: 2-second delay for typewriter
         window.onload = () => { setTimeout(typeEffect, 2000); };
 
+        // Advanced GSAP Navigation Engine
         function showPage(id) {
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            // Hide all pages instantly to prevent layout jumps
+            document.querySelectorAll('.page-section').forEach(s => {
+                s.classList.remove('active');
+                s.style.opacity = 0; // Prepare for GSAP fade
+            });
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            
+            // Activate target page
+            const target = document.getElementById(id);
+            target.classList.add('active');
             document.getElementById('n-' + id).classList.add('active');
             window.scrollTo(0,0);
+
+            // GSAP Animations (The "Bruut/Quake" feel)
+            gsap.to(target, { opacity: 1, duration: 0.5 });
+            
+            // Staggered reveal for typography
+            gsap.fromTo(target.querySelectorAll('.gsap-element'), 
+                { y: 60, opacity: 0, clipPath: 'inset(100% 0 0 0)' }, 
+                { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', duration: 1.2, stagger: 0.15, ease: "power4.out" }
+            );
+
+            // 3D Staggered reveal for horizontal cards
+            gsap.fromTo(target.querySelectorAll('.gsap-card'),
+                { x: 100, y: 50, opacity: 0, rotationY: 15, scale: 0.9 },
+                { x: 0, y: 0, opacity: 1, rotationY: 0, scale: 1, duration: 1, stagger: 0.1, ease: "back.out(1.2)", delay: 0.3 }
+            );
         }
 
-        // Enhanced Slideshow Engine (Handles Images and Shorts)
+        // Slideshow Engine
         document.querySelectorAll('.slideshow').forEach(s => {
             const imgIds = s.dataset.imgs ? s.dataset.imgs.split(',') : [];
             const vidIds = s.dataset.vids ? s.dataset.vids.split(',') : [];
@@ -227,6 +273,9 @@
                 }, 6000);
             }
         });
+
+        // Loop for ME! card (Drive Fallback)
+        setInterval(() => { const me = document.getElementById('me-vid'); if(me && me.src.includes('drive')) me.src = me.src; }, 30000);
 
         document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
