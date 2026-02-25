@@ -14,9 +14,10 @@
         body { background-color: var(--obsidian); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         #dot-cursor { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; mix-blend-mode: difference; }
 
-        /* Background Engine */
+        /* Background Engine: Cinematic Reel + Portraits */
         .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.2; filter: grayscale(100%); }
         .video-bg iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+        .portrait-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; background-position: center; opacity: 0; transition: opacity 2.5s; filter: grayscale(100%) brightness(30%); }
 
         /* Navigation & HUD */
         nav { z-index: 1000; mix-blend-mode: difference; }
@@ -24,26 +25,28 @@
         .nav-link.active, .nav-link:hover { color: var(--orange); }
         .grad-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Layout Sections */
+        /* Layout */
         .page-section { display: none; padding: 12vh 5vw; min-height: 100vh; position: relative; z-index: 10; }
         .page-section.active { display: block; }
-        .horizontal-scroll { display: flex; overflow-x: auto; gap: 30px; scrollbar-width: none; padding: 20px 0; }
+        .horizontal-scroll { display: flex; overflow-x: auto; gap: 30px; scrollbar-width: none; padding: 20px 0; scroll-behavior: smooth; }
         .horizontal-scroll::-webkit-scrollbar { display: none; }
-        .scroll-btn { background: rgba(255,107,0,0.2); border: 1px solid var(--orange); padding: 10px; cursor: pointer; color: var(--orange); }
+        .scroll-btn { background: rgba(255,107,0,0.1); border: 1px solid var(--orange); padding: 8px 15px; cursor: pointer; color: var(--orange); font-size: 10px; transition: 0.3s; }
+        .scroll-btn:hover { background: var(--orange); color: #000; }
 
-        .card { min-width: 400px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 15px; transition: 0.5s; }
-        .card:hover { border-color: var(--orange); transform: translateY(-5px); }
+        .card { min-width: 420px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 18px; transition: 0.5s; }
+        .card:hover { border-color: var(--orange); transform: translateY(-8px); }
         
-        /* HUD Footer */
+        /* Fixed HUD Elements */
         .hud { position: fixed; z-index: 100; mix-blend-mode: difference; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; }
-        .hud-left { bottom: 30px; left: 40px; }
-        .hud-right { bottom: 30px; right: 40px; text-align: right; }
-        .hud-center { bottom: 15px; left: 50%; transform: translateX(-50%); opacity: 0.4; font-size: 8px; }
+        .hud-left { bottom: 35px; left: 40px; line-height: 2; }
+        .hud-right { bottom: 35px; right: 40px; text-align: right; line-height: 2; }
+        .hud-center { bottom: 20px; left: 50%; transform: translateX(-50%); opacity: 0.5; font-size: 8px; white-space: nowrap; }
         
-        .donate-btn { position: fixed; top: 60%; right: 40px; transform: translateY(-50%) rotate(90deg); transform-origin: right; z-index: 101; border: 1px solid var(--orange); color: var(--orange); padding: 10px 20px; font-size: 10px; }
+        .donate-btn { position: fixed; top: 65%; right: 40px; transform: translateY(-50%) rotate(90deg); transform-origin: right; z-index: 101; border: 1px solid var(--orange); color: var(--orange); padding: 10px 25px; font-size: 10px; letter-spacing: 2px; background: transparent; }
+        .donate-btn:hover { background: var(--orange); color: #000; }
 
         .slideshow { width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden; }
-        .slideshow img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1s; }
+        .slideshow img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.2s; }
         .slideshow img.active { opacity: 1; }
     </style>
 </head>
@@ -54,23 +57,27 @@
     <div class="video-bg">
         <iframe src="https://www.youtube.com/embed/ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_?autoplay=1&mute=1&controls=0&loop=1&playlist=ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_" frameborder="0"></iframe>
     </div>
+    <div id="portrait-bg" class="portrait-bg"></div>
 
     <div class="hud hud-left">
         <p>+254 708 813 147</p>
         <p>darwinwanjiru254@gmail.com</p>
     </div>
+    
     <div class="hud hud-center">
-        Glimpse of Heaven • Oosberg Productions • HWC Entertainment • Igiza Arts • Creative Box • Hamptons Collections
+        Glimpse of Heaven • Oosberg Productions • HWC Entertainment • Igiza Arts • Creative Box • Artofunnex • Hamptons Collections
     </div>
+
     <div class="hud hud-right">
-        <a href="https://instagram.com/glimpseofheaven.productions" target="_blank">INSTAGRAM</a><br>
-        <a href="https://youtube.com/@glimpseofheavenproductions" target="_blank">YOUTUBE</a><br>
-        <a href="mailto:glimpseofheaven.productions@gmail.com">EMAIL PRODUCTIONS</a>
+        <a href="https://instagram.com/glimpseofheaven.productions" target="_blank" class="block hover:text-orange-500">INSTAGRAM</a>
+        <a href="https://youtube.com/@glimpseofheavenproductions" target="_blank" class="block hover:text-orange-500">YOUTUBE</a>
+        <a href="mailto:glimpseofheaven.productions@gmail.com" class="block hover:text-orange-500">glimpseofheaven.productions@gmail.com</a>
     </div>
-    <button onclick="showPage('collab')" class="donate-btn uppercase tracking-widest">Invest in Vision</button>
+
+    <button onclick="showPage('collab')" class="donate-btn uppercase">Invest in Vision</button>
 
     <nav class="fixed top-0 w-full p-10 flex justify-between items-start">
-        <div class="text-3xl font-black grad-text tracking-tighter" onclick="showPage('home')">OOSBERG</div>
+        <div class="text-3xl font-black grad-text tracking-tighter cursor-pointer" onclick="showPage('home')">OOSBERG</div>
         <div class="flex flex-col gap-4 text-right">
             <span onclick="showPage('home')" class="nav-link active" id="n-home">Home</span>
             <span onclick="showPage('film')" class="nav-link" id="n-film">Film</span>
@@ -80,80 +87,135 @@
         </div>
     </nav>
 
+    <section id="home" class="page-section active">
+        <h1 class="text-9xl font-black grad-text leading-[0.85] uppercase mb-20">DARWIN<br>WANJIRU</h1>
+        <div class="grid md:grid-cols-2 gap-20 items-center">
+            <div id="typewriter" class="text-[11px] uppercase tracking-[0.4em] leading-[2.5] opacity-70"></div>
+            <div class="relative"><iframe id="home-reel" class="w-full aspect-video border border-white/10 opacity-0 transition-opacity duration-1000" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe></div>
+        </div>
+    </section>
+
     <section id="film" class="page-section">
-        <h2 class="text-6xl font-black mb-10 grad-text">FILM</h2>
-        <div class="mb-10">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-xs uppercase tracking-widest">Completed Projects</h3><div class="flex gap-2"><button onclick="scrollSection('f-c', -400)" class="scroll-btn">←</button><button onclick="scrollSection('f-c', 400)" class="scroll-btn">→</button></div></div>
+        <h2 class="text-7xl font-black mb-12 grad-text">FILM</h2>
+        
+        <div class="mb-16">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-[10px] tracking-[5px] uppercase">Completed Projects</h3>
+                <div class="flex gap-2">
+                    <button onclick="scrollSection('f-c', -450)" class="scroll-btn">PREV</button>
+                    <button onclick="scrollSection('f-c', 450)" class="scroll-btn">NEXT</button>
+                </div>
+            </div>
             <div class="horizontal-scroll" id="f-c">
-                <div class="card"><iframe src="https://www.youtube.com/embed/CpL2LXK1U-s" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px]">DRIFT (2025) - PRODUCER</p></div>
-                <div class="card"><iframe id="me-vid" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px]">ME! (2025) - PRODUCER</p></div>
-                <div class="card"><iframe src="https://www.youtube.com/embed/7sP2mw_k7RQ" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px]">THE MISSING PIECE (2025) - DIRECTOR/WRITER/PRODUCER</p></div>
-                <div class="card"><div class="slideshow" data-imgs="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu,19SLlZbXSiOHKnSrgGZ8kvUjOj-jvJhb3,1tYOnSmW-FshjSRE8cyWwg__pATAiHQOu,12AA-RanFcDx_rMXQghzdCnrA0Jq4lQw4"></div><p class="mt-4 text-[10px]">STROKES OF LIFE (2024) - DIRECTOR/WRITER</p></div>
-                <div class="card"><iframe src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview?start=330" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px]">TOUGH CHANGES (2022) - DIRECTOR/WRITER/PRODUCER</p></div>
-                <div class="card"><iframe src="https://www.youtube.com/embed/OQQv0R_SV1I" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px]">BLESSED CONJECTURE (2022) - PRODUCER</p></div>
+                <div class="card"><iframe src="https://www.youtube.com/embed/CpL2LXK1U-s" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px] font-bold">DRIFT (2025) - PRODUCER</p></div>
+                <div class="card"><iframe id="me-vid" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px] font-bold">ME! (2025) - PRODUCER</p></div>
+                <div class="card"><iframe src="https://www.youtube.com/embed/7sP2mw_k7RQ" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px] font-bold">THE MISSING PIECE (2025) - DIRECTOR/WRITER/PRODUCER</p></div>
+                <div class="card"><div class="slideshow" data-imgs="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu,19SLlZbXSiOHKnSrgGZ8kvUjOj-jvJhb3,1tYOnSmW-FshjSRE8cyWwg__pATAiHQOu,12AA-RanFcDx_rMXQghzdCnrA0Jq4lQw4"></div><p class="mt-4 text-[10px] font-bold">STROKES OF LIFE (2024) - DIRECTOR/WRITER</p></div>
+                <div class="card"><iframe src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview?start=330" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px] font-bold uppercase">Tough Changes (2022) - Director/Writer/Producer</p></div>
+                <div class="card"><iframe src="https://www.youtube.com/embed/OQQv0R_SV1I" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px] font-bold">BLESSED CONJECTURE (2022) - PRODUCER</p></div>
             </div>
         </div>
+
         <div>
-            <h3 class="text-xs uppercase tracking-widest mb-4">Upcoming Projects</h3>
-            <div class="horizontal-scroll" id="f-u">
-                <div class="card"><div class="slideshow" data-imgs="165MRSFz8YtajUhQWoC6OhInk0TLmEkwN,1qbTa10fJN9-z3l_KyX0Bw95Pphx1AuVp,1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ"></div><p class="mt-4 text-[10px]">RUN! (2026) - PRODUCER & WRITER</p></div>
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1my6FJ_mZWEqm5GADm6HZReyXZJfluTou&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px]">THE WAITING ROOM (2026) - PRODUCER</p></div>
+            <h3 class="text-[10px] tracking-[5px] uppercase mb-6">Upcoming Projects</h3>
+            <div class="horizontal-scroll">
+                <div class="card"><div class="slideshow" data-imgs="165MRSFz8YtajUhQWoC6OhInk0TLmEkwN,1qbTa10fJN9-z3l_KyX0Bw95Pphx1AuVp,1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ"></div><p class="mt-4 text-[10px] font-bold">RUN! (2026) - PRODUCER & WRITER</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1my6FJ_mZWEqm5GADm6HZReyXZJfluTou&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px] font-bold">THE WAITING ROOM (2026) - PRODUCER</p></div>
             </div>
         </div>
     </section>
 
     <section id="theatre" class="page-section">
-        <h2 class="text-6xl font-black mb-10 grad-text">THEATRE</h2>
-        <div class="mb-10">
-            <h3 class="text-xs uppercase tracking-widest mb-4">Completed Plays</h3>
-            <div class="horizontal-scroll" id="t-c">
-                <div class="card"><iframe src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px]">THE LAST CONFESSION (2025) - ACTOR</p></div>
-                <div class="card"><div class="slideshow" data-imgs="1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF,1UIP92GwS_XcAhTF2p8Pgc3AIKak-WYzD"></div><p class="mt-4 text-[10px]">FRACTURED TIES (2025) - ASM</p></div>
-                <div class="card"><div class="slideshow" data-imgs="1aaOZ9eb9KrFEOIuobQy6uJQ42Zsgh9Xy,1euSwDVMs_CTsMSyTDNtKxz0TNjkFiqLr,1rD0ynxkRoPk9LtQF8VakonIewGHXgNHT"></div><p class="mt-4 text-[10px]">DIE MENTIONS IN DIMENSIONS (2022) - ACTOR</p></div>
-                <div class="card"><div class="slideshow" data-imgs="1PXgfxZzfPIkIDKjvO4pfxzQX9cHhxw7j,1S9kdDS26yWSGv9v4wKQDhMsoLy6B9pLr,1uw5oxBPG-Gl8feRHTr2iU-SxdB6tKZzN"></div><p class="mt-4 text-[10px]">BRAVADO AFICIONADO (2019) - ACTOR</p></div>
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px]">FACED DEFACED (2019) - ACTOR</p></div>
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1D9A4H9dBJNywLMHCdxZraiUgL57l_xLf&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px]">AFFECTED (2020) - WRITER/DIRECTOR</p></div>
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1TX5q891Jm_iEp7q94okuRPto3uN8nANO&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px]">NEIGHBORHOOD WATCH (2022) - WRITER/DIRECTOR</p></div>
+        <h2 class="text-7xl font-black mb-12 grad-text">THEATRE</h2>
+        <div class="mb-16">
+            <h3 class="text-[10px] tracking-[5px] uppercase mb-6">Completed Stage Plays</h3>
+            <div class="horizontal-scroll">
+                <div class="card"><iframe src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-[10px] font-bold uppercase">The Last Confession (2025) - Actor</p></div>
+                <div class="card"><div class="slideshow" data-imgs="1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF,1UIP92GwS_XcAhTF2p8Pgc3AIKak-WYzD"></div><p class="mt-4 text-[10px] font-bold uppercase">Fractured Ties (2025) - ASM</p></div>
+                <div class="card"><div class="slideshow" data-imgs="1aaOZ9eb9KrFEOIuobQy6uJQ42Zsgh9Xy,1euSwDVMs_CTsMSyTDNtKxz0TNjkFiqLr,1rD0ynxkRoPk9LtQF8VakonIewGHXgNHT"></div><p class="mt-4 text-[10px] font-bold uppercase">Die Mentions in Dimensions (2022) - Actor</p></div>
+                <div class="card"><div class="slideshow" data-imgs="1PXgfxZzfPIkIDKjvO4pfxzQX9cHhxw7j,1S9kdDS26yWSGv9v4wKQDhMsoLy6B9pLr,1uw5oxBPG-Gl8feRHTr2iU-SxdB6tKZzN"></div><p class="mt-4 text-[10px] font-bold uppercase">Bravado Aficionado (2019) - Actor</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px] font-bold uppercase">Faced Defaced (2019) - Actor</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1DHGok1r_3wFp5CBtQWj2NSVjsUK04eMp&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px] font-bold uppercase">Perishable Cherishables (2018) - Actor</p></div>
+                <div class="card"><div class="slideshow" data-imgs="1ZfHMeB_j30bYe_C2cAbinsxMBSOoBxxw,1JR9I6dqPHWMLvGgIWO4aeQasUr7RKAUU"></div><p class="mt-4 text-[10px] font-bold uppercase">Sins and Secrets (2018) - Actor</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1D9A4H9dBJNywLMHCdxZraiUgL57l_xLf&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px] font-bold uppercase">Affected (2020) - Writer/Director</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1HsHjb2K7N7b52GL1pPgGBtUcL-xGZwVj&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px] font-bold uppercase">Topsy Turvy (2019) - Actor</p></div>
+                <div class="card"><img src="https://drive.google.com/thumbnail?id=1TX5q891Jm_iEp7q94okuRPto3uN8nANO&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-[10px] font-bold uppercase">Neighborhood Watch (2022) - Writer/Director</p></div>
             </div>
         </div>
-        <div><h3 class="text-xs uppercase tracking-widest mb-4">Upcoming Plays</h3>
-            <div class="horizontal-scroll"><div class="card"><div class="flex items-center justify-center bg-white/5 aspect-video text-[10px]">THE BLACK SHEEP (Script in Progress)</div><p class="mt-4 text-[10px]">THE BLACK SHEEP - WRITER/DIRECTOR</p></div></div>
+        <div>
+            <h3 class="text-[10px] tracking-[5px] uppercase mb-6">Upcoming Plays</h3>
+            <div class="card max-w-sm border-dashed"><div class="aspect-video bg-white/5 flex items-center justify-center p-8 text-center text-[10px] tracking-widest leading-loose">THE BLACK SHEEP<br>Script in Production</div><p class="mt-4 text-[10px] font-bold">THE BLACK SHEEP - WRITER/DIRECTOR</p></div>
         </div>
     </section>
 
     <section id="photo" class="page-section">
-        <h2 class="text-6xl font-black mb-10 grad-text">PHOTOGRAPHY</h2>
-        <div class="horizontal-scroll" id="p-c">
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">CALM</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">IRON</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">ORDER</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1LX0unSMVlrCXMqP3A5tUY15isJXeV66J&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">BEHOLDER</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">UNITY</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1Mg2DkIj47N8QQ4Adyfn5M-gkjX7wn7MW&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">NATURAL</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1WELCtmX_SMlHCtOMNUMJnkAAyCIbdkMY&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">FOCUS</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1Lgw45_Nkear7VQSYNf189oX87yUpzuxD&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">FRAME</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1_Us2hseIoji9idiAwVhQRJNTOaU9Agx_&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">INTERACTION</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1UgeewGbBXYGNmTQ29LrtnknMeT_JNaO4&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">URBAN</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1LdaFCwXBNmQzOrwcxh7IQOx1CbqbjbGL&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">PEOPLE</p></div>
-            <div class="card"><img src="https://drive.google.com/thumbnail?id=1vQMPlALwePYkfRqERSq3whQkrAM4rR-A&sz=w800" class="w-full h-64 object-cover"><p class="mt-4 text-[10px]">THERE IT IS</p></div>
+        <h2 class="text-7xl font-black mb-12 grad-text">PHOTOGRAPHY</h2>
+        <div class="horizontal-scroll">
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">CALM</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">IRON</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">ORDER</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1LX0unSMVlrCXMqP3A5tUY15isJXeV66J&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">BEHOLDER</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">UNITY</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1Mg2DkIj47N8QQ4Adyfn5M-gkjX7wn7MW&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">NATURAL</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1WELCtmX_SMlHCtOMNUMJnkAAyCIbdkMY&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">FOCUS</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1Lgw45_Nkear7VQSYNf189oX87yUpzuxD&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">FRAME</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1_Us2hseIoji9idiAwVhQRJNTOaU9Agx_&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">INTERACTION</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1UgeewGbBXYGNmTQ29LrtnknMeT_JNaO4&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">URBAN</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1LdaFCwXBNmQzOrwcxh7IQOx1CbqbjbGL&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">PEOPLE</p></div>
+            <div class="card"><img src="https://drive.google.com/thumbnail?id=1vQMPlALwePYkfRqERSq3whQkrAM4rR-A&sz=w800" class="w-full h-80 object-cover"><p class="mt-4 text-[10px] font-bold">THERE IT IS</p></div>
         </div>
-        <div class="mt-20"><h3 class="text-xs uppercase tracking-widest mb-4">Upcoming Photobook</h3><div class="card max-w-lg"><div class="aspect-video bg-white/5 flex items-center justify-center p-10 text-center text-xs tracking-widest">WHY? - Awareness Photobook by Darwin Wanjiru</div><p class="mt-4 text-[10px]">WHY - Awareness & Environment Photobook</p></div></div>
+        <div class="mt-20"><h3 class="text-[10px] tracking-[5px] uppercase mb-6">Upcoming Photobook</h3><div class="card max-w-lg border-dashed"><div class="aspect-video bg-white/5 flex items-center justify-center p-10 text-center text-[10px] tracking-[4px] leading-loose">WHY? - A Photobook by Darwin Wanjiru</div><p class="mt-4 text-[10px] font-bold uppercase">WHY - Awareness and Thought Provoking Photostory</p></div></div>
     </section>
 
     <section id="collab" class="page-section">
         <div class="max-w-4xl pt-20">
-            <h2 class="text-8xl font-black grad-text mb-10">COLLABORATE</h2>
-            <p class="text-sm tracking-widest leading-loose opacity-70 mb-10">I am welcoming visionaries, sponsors, and art enthusiasts to partner in this filmmaking journey. My work is geared towards tackling common crises through the transformative power of film and theatre[cite: 129].</p>
-            <div class="grid md:grid-cols-2 gap-10">
-                <div class="border border-white/10 p-10"><h3 class="text-orange-500 text-xs mb-4">ENGAGE</h3><p class="text-[10px] mb-6">Follow Glimpse of Heaven Productions on YouTube and Instagram to stay updated with our latest stories[cite: 124].</p><div class="flex gap-4"><a href="#" class="text-[10px] border border-white/20 px-4 py-2 hover:bg-white hover:text-black">INSTAGRAM</a><a href="#" class="text-[10px] border border-white/20 px-4 py-2 hover:bg-white hover:text-black">YOUTUBE</a></div></div>
-                <div class="border border-white/10 p-10"><h3 class="text-orange-500 text-xs mb-4">INVEST</h3><p class="text-[10px] mb-6">Support the production of high-impact films and theatrical works addressing psychological challenges and social redemption[cite: 31, 129].</p><div class="bg-orange-600/20 p-4 border border-orange-500/50"><p class="text-[10px] font-bold">MPESA TILL: 6880821</p><p class="text-[8px] opacity-60">Foreign Box Ventures</p></div></div>
+            <h2 class="text-8xl font-black grad-text mb-12">COLLABORATE</h2>
+            <p class="text-sm tracking-[0.2em] leading-[2.2] opacity-70 mb-16">I am welcoming visionaries, sponsors, and art enthusiasts to partner in this filmmaking journey. My work is geared towards tackling common crises through the transformative power of film and theatre[cite: 123, 129].</p>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="border border-white/10 p-12 bg-white/5"><h3 class="text-orange-500 text-[10px] tracking-widest mb-6">ENGAGE</h3><p class="text-[10px] leading-relaxed mb-8">Follow Glimpse of Heaven Productions on YouTube and Instagram to stay updated with our latest stories[cite: 124].</p><div class="flex gap-4"><a href="https://instagram.com/glimpseofheaven.productions" target="_blank" class="text-[10px] border border-white/20 px-6 py-3 hover:bg-white hover:text-black">INSTAGRAM</a><a href="https://youtube.com/@glimpseofheavenproductions" target="_blank" class="text-[10px] border border-white/20 px-6 py-3 hover:bg-white hover:text-black">YOUTUBE</a></div></div>
+                <div class="border border-white/10 p-12 bg-white/5"><h3 class="text-orange-500 text-[10px] tracking-widest mb-6">INVEST</h3><p class="text-[10px] leading-relaxed mb-8">Support the production of high-impact films and theatrical works addressing psychological challenges and social redemption[cite: 129].</p><div class="bg-orange-600/10 p-6 border border-orange-500/30"><p class="text-[11px] font-bold tracking-widest">MPESA TILL: 6880821</p><p class="text-[9px] opacity-60 uppercase mt-1">Foreign Box Ventures</p></div></div>
             </div>
         </div>
     </section>
 
     <script>
+        // Pointer
         const cursor = document.getElementById('dot-cursor');
         document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+
+        // Portraits BG (Pointer 4)
+        const portraitList = ["1MiFANCBKfY8A__53_g_ZX58QYtLGinUa", "1CVMzCX153eWk9-IGmKEgT2fdMbjJ_lrN", "1FA5maA6Zw7JOvT7BSaRUkPF8aO63-NFy", "1TpUSmoPhOUF05SU-OuGL1E136yh1KsGP", "1uEReME9GleXRkhrrisyu9d-LkgSNuXA2"];
+        let pIdx = 0;
+        const pBg = document.getElementById('portrait-bg');
+        function cyclePortrait() {
+            pBg.style.opacity = 0;
+            setTimeout(() => {
+                pBg.style.backgroundImage = `url(https://drive.google.com/thumbnail?id=${portraitList[pIdx]}&sz=w1920)`;
+                pBg.style.opacity = 0.25;
+                pIdx = (pIdx + 1) % portraitList.length;
+            }, 2500);
+        }
+        setInterval(cyclePortrait, 9000); cyclePortrait();
+
+        // ME! 30s Restart
+        setInterval(() => { const me = document.getElementById('me-vid'); me.src = me.src; }, 30000);
+
+        // Home Delay
+        setTimeout(() => { const hr = document.getElementById('home-reel'); hr.classList.remove('opacity-0'); hr.src += "&autoplay=1&mute=1"; }, 5000);
+
+        // Slideshows
+        document.querySelectorAll('.slideshow').forEach(s => {
+            const ids = s.dataset.imgs.split(',');
+            ids.forEach((id, i) => { const img = document.createElement('img'); img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w800`; if(i===0) img.classList.add('active'); s.appendChild(img); });
+            let cur = 0; const imgs = s.querySelectorAll('img');
+            setInterval(() => { imgs[cur].classList.remove('active'); cur = (cur+1)%imgs.length; imgs[cur].classList.add('active'); }, 5000);
+        });
+
+        // Typewriter (Pointer b)
+        const introText = "I am an independent international filmmaker from Kenya with a passion for producing stories that first entertain, then educate society on issues affecting their social, physical, economic, and spiritual well-being[cite: 22].";
+        let charIdx = 0;
+        function typeEffect() { if (charIdx < introText.length) { document.getElementById("typewriter").innerHTML += introText.charAt(charIdx); charIdx++; setTimeout(typeEffect, 35); } }
+        window.onload = typeEffect;
 
         function showPage(id) {
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
@@ -164,17 +226,6 @@
         }
 
         function scrollSection(id, val) { document.getElementById(id).scrollBy({ left: val, behavior: 'smooth' }); }
-
-        // ME! 30s Restart
-        setInterval(() => { const me = document.getElementById('me-vid'); me.src = me.src; }, 30000);
-
-        // Slideshows
-        document.querySelectorAll('.slideshow').forEach(s => {
-            const ids = s.dataset.imgs.split(',');
-            ids.forEach((id, i) => { const img = document.createElement('img'); img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w800`; if(i===0) img.classList.add('active'); s.appendChild(img); });
-            let current = 0; const imgs = s.querySelectorAll('img');
-            setInterval(() => { imgs[current].classList.remove('active'); current = (current + 1) % imgs.length; imgs[current].classList.add('active'); }, 5000);
-        });
 
         document.addEventListener('contextmenu', e => e.preventDefault());
         showPage('home');
