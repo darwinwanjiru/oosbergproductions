@@ -3,71 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darwin Wanjiru | Multidisciplinary Artist</title>
+    <title>Oosberg Productions | Darwin Wanjiru</title>
+    <link rel="icon" href="https://drive.google.com/thumbnail?id=1clv9A5QUUW6esjrFNjJhJR-HZlqKqxJH&sz=w32" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;900&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
     <style>
-        :root { --orange: #ff6b00; --obsidian: #050505; }
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        :root { --gold: linear-gradient(90deg, #ff6b00, #ffae00, #ff3d00); --obsidian: #030303; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         body { background-color: var(--obsidian); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        /* Custom Cursor: The Dot */
+        #cursor { width: 8px; height: 8px; background: #ff6b00; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s; }
+
+        /* Background Cinematic Engine */
+        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.25; filter: contrast(120%) grayscale(50%); }
+        .bg-portrait { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-size: cover; background-position: center; animation: bgFade 20s infinite; opacity: 0.15; }
+        @keyframes bgFade { 0%, 100% { background-image: url('https://drive.google.com/thumbnail?id=1clv9A5QUUW6esjrFNjJhJR-HZlqKqxJH&sz=w1920'); } 33% { background-image: url('https://drive.google.com/thumbnail?id=1Z9GQfzwKIUkQ6u4UT6kj7KoXPIZe7yum&sz=w1920'); } 66% { background-image: url('https://drive.google.com/thumbnail?id=15ZKyzHAy66p9ZT6dUeH1-9Vi9qanfylL&sz=w1920'); } }
+
+        /* Glossy Gold Gradient Fonts */
+        .gradient-text { background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Playfair Display', serif; }
         
-        /* Unified Background Reel  */
-        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-        .video-bg iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; opacity: 0.3; filter: grayscale(100%) contrast(120%); }
-        .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, var(--obsidian) 95%); z-index: 0; pointer-events: none; }
+        /* Navigation & HUD */
+        nav { z-index: 1000; mix-blend-mode: difference; }
+        .nav-link { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #888; transition: 0.5s; }
+        .nav-link:hover { color: #ff6b00; transform: skewX(-10deg); }
 
-        /* Navigation [cite: 6, 7, 15] */
-        nav { z-index: 100; mix-blend-mode: difference; }
-        .nav-link { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; color: #666; transition: 0.3s; }
-        .nav-link.active, .nav-link:hover { color: var(--orange); }
-
-        /* Content Sections */
-        .page-section { display: none; padding: 15vh 5vw 10vh; min-height: 100vh; position: relative; z-index: 10; }
-        .page-section.active { display: block; }
-
-        /* Horizontal Reels  */
-        .reel-container { position: relative; margin-bottom: 80px; }
-        .reel-title { font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; border-left: 2px solid var(--orange); padding-left: 15px; }
-        .horizontal-scroll { display: flex; overflow-x: auto; gap: 30px; scroll-behavior: smooth; padding: 20px 0; -ms-overflow-style: none; scrollbar-width: none; }
+        /* Horizontal Tiers */
+        .reel-container { position: relative; margin-bottom: 100px; padding: 0 40px; }
+        .horizontal-scroll { display: flex; overflow-x: auto; gap: 40px; scroll-behavior: smooth; padding: 40px 0; scrollbar-width: none; }
         .horizontal-scroll::-webkit-scrollbar { display: none; }
         
-        .card { min-width: 380px; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: 0.5s; }
-        .card:hover { border-color: var(--orange); transform: translateY(-10px); }
+        /* Project Box Visuals */
+        .card { min-width: 450px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); padding: 15px; position: relative; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .card:hover { border-color: #ff6b00; transform: scale(1.02) rotateY(5deg); box-shadow: 0 0 30px rgba(255,107,0,0.2); }
+        .card iframe, .card .slide-container { width: 100%; aspect-ratio: 16/9; border: none; pointer-events: auto; }
 
-        .btn-nav { background: var(--orange); color: #000; width: 40px; height: 40px; border-radius: 50%; display: flex; items-center; justify-content: center; font-weight: bold; cursor: pointer; transition: 0.3s; position: absolute; top: 50%; transform: translateY(-50%); z-index: 20; }
-        .btn-prev { left: -20px; }
-        .btn-next { right: -20px; }
+        /* Transitions */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-        /* Typography */
-        .huge-title { font-family: 'Playfair Display', serif; font-size: clamp(4rem, 15vw, 18rem); line-height: 0.8; letter-spacing: -0.05em; }
-        .typing-container { font-size: 12px; line-height: 2; letter-spacing: 0.2em; color: #aaa; text-transform: uppercase; max-width: 600px; }
-
-        /* HUD [cite: 14, 15] */
-        .hud-left { position: fixed; bottom: 40px; left: 40px; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; z-index: 100; mix-blend-mode: difference; }
-        .hud-right { position: fixed; bottom: 40px; right: 40px; text-align: right; font-size: 10px; z-index: 100; mix-blend-mode: difference; }
+        /* Anti-Download Shield */
+        .shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
     </style>
 </head>
 <body>
 
-    <div class="video-bg">
-        <iframe src="https://www.youtube.com/embed/CpL2LXK1U-s?autoplay=1&mute=1&controls=0&loop=1&playlist=CpL2LXK1U-s" frameborder="0"></iframe>
-    </div>
-    <div class="vignette"></div>
+    <div id="cursor"></div>
 
-    <div class="hud-left">
-        <p>darwinwanjiru254@gmail.com</p>
-        <p>+254 708 813 147</p>
+    <div class="video-bg">
+        <iframe id="bg-video" src="https://www.youtube.com/embed/ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_?autoplay=1&mute=1&controls=0&loop=1&playlist=ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_" class="w-full h-full scale-110"></iframe>
     </div>
-    <div class="hud-right">
-        <a href="https://instagram.com/..." class="block">INSTAGRAM</a>
-        <a href="https://youtube.com/..." class="block">YOUTUBE</a>
-        <p class="mt-4 text-[#ff6b00]">GLIMPSE OF HEAVEN PRODUCTIONS</p>
-    </div>
+    <div class="bg-portrait"></div>
 
     <nav class="fixed top-0 w-full p-10 flex justify-between items-start">
-        <div class="huge-title text-2xl tracking-tighter cursor-pointer" onclick="showPage('home')">D.W.</div>
-        <div class="flex flex-col gap-4 text-right">
+        <div class="text-3xl font-black gradient-text tracking-tighter" style="cursor: pointer;" onclick="showPage('home')">OOSBERG</div>
+        <div class="flex flex-col gap-3 text-right">
             <span onclick="showPage('home')" class="nav-link active" id="n-home">Home</span>
             <span onclick="showPage('film')" class="nav-link" id="n-film">Film</span>
             <span onclick="showPage('theatre')" class="nav-link" id="n-theatre">Theatre</span>
@@ -76,122 +67,104 @@
         </div>
     </nav>
 
-    <section id="home" class="page-section active">
-        <h1 class="huge-title">DARWIN<br><span class="text-[#ff6b00]">WANJIRU</span></h1>
-        <div class="grid md:grid-cols-2 mt-20 gap-20">
-            <div class="typing-container" id="typewriter">
-                </div>
-            <div class="flex flex-col gap-4">
-                <iframe class="w-full aspect-video border border-white/10" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe>
-                <p class="text-[9px] uppercase tracking-[0.5em] opacity-40">Director's Reel 2026</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="film" class="page-section">
-        <h2 class="huge-title text-6xl mb-20 uppercase">Film</h2>
-        
-        <div class="reel-container">
-            <h3 class="reel-title">Completed Projects</h3>
-            <div class="btn-nav btn-prev" onclick="scrollR('reel-f-c', -400)">←</div>
-            <div class="horizontal-scroll" id="reel-f-c">
-                <div class="card"><iframe src="https://www.youtube.com/embed/CpL2LXK1U-s" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">DRIFT (2025)</p></div>
-                <div class="card"><iframe src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">ME! (2025)</p></div>
-                <div class="card"><iframe src="https://www.youtube.com/embed/7sP2mw_k7RQ" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">THE MISSING PIECE (2025)</p></div>
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1EPuffUNDUwhcchwhLk1zw1DbSBzby9OM&sz=w800" class="w-full aspect-video object-cover"><p class="mt-4 text-xs font-bold">STROKES OF LIFE (2024)</p></div>
-                <div class="card"><iframe src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">TOUGH CHANGES (2022)</p></div>
-                <div class="card"><iframe src="https://www.youtube.com/embed/OQQv0R_SV1I" class="w-full aspect-video"></iframe><p class="mt-4 text-xs font-bold">BLESSED CONJECTURE (2022)</p></div>
-            </div>
-            <div class="btn-nav btn-next" onclick="scrollR('reel-f-c', 400)">→</div>
-        </div>
-
-        <div class="reel-container">
-            <h3 class="reel-title">Upcoming Projects</h3>
-            <div class="horizontal-scroll">
-                <div class="card border-dashed"><h4 class="text-2xl font-black">RUN!</h4><p class="text-[9px] uppercase mt-2">Short Film 2026</p></div>
-                <div class="card border-dashed"><h4 class="text-2xl font-black">THE WAITING ROOM</h4><p class="text-[9px] uppercase mt-2">Short Film 2026</p></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="theatre" class="page-section">
-        <h2 class="huge-title text-6xl mb-20 uppercase">Theatre</h2>
-        <div class="reel-container">
-            <h3 class="reel-title">Completed Plays</h3>
-            <div class="btn-nav btn-prev" onclick="scrollR('reel-t-c', -400)">←</div>
-            <div id="reel-t-c" class="horizontal-scroll">
-                <div class="card"><iframe src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">THE LAST CONFESSION</p></div>
-                <div class="card"><iframe src="https://drive.google.com/file/d/1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">FRACTURED TIES</p></div>
-                <div class="card"><iframe src="https://drive.google.com/file/d/1aaOZ9eb9KrFEOIuobQy6uJQ42Zsgh9Xy/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">DIE MENTIONS IN DIMENSIONS</p></div>
-                <div class="card"><iframe src="https://drive.google.com/file/d/1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">FACED DEFACED</p></div>
-                <div class="card"><iframe src="https://drive.google.com/file/d/1DHGok1r_3wFp5CBtQWj2NSVjsUK04eMp/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">PERISHABLE CHERISHABLES</p></div>
-                <div class="card"><iframe src="https://drive.google.com/file/d/1ZfHMeB_j30bYe_C2cAbinsxMBSOoBxxw/preview" class="w-full aspect-video"></iframe><p class="mt-4 text-xs">SINS AND SECRETS</p></div>
-            </div>
-            <div class="btn-nav btn-next" onclick="scrollR('reel-t-c', 400)">→</div>
-        </div>
-    </section>
-
-    <section id="photo" class="page-section">
-        <h2 class="huge-title text-6xl mb-20 uppercase">Photography</h2>
-        <div class="reel-container">
-            <h3 class="reel-title">Completed Series</h3>
-            <div class="btn-nav btn-prev" onclick="scrollR('reel-p-c', -400)">←</div>
-            <div id="reel-p-c" class="horizontal-scroll">
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800" class="w-full grayscale hover:grayscale-0 transition duration-700"><p class="mt-4 text-center text-[10px] tracking-widest">CALM</p></div>
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800" class="w-full grayscale hover:grayscale-0 transition duration-700"><p class="mt-4 text-center text-[10px] tracking-widest">IRON</p></div>
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800" class="w-full grayscale hover:grayscale-0 transition duration-700"><p class="mt-4 text-center text-[10px] tracking-widest">ORDER</p></div>
-                <div class="card"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800" class="w-full grayscale hover:grayscale-0 transition duration-700"><p class="mt-4 text-center text-[10px] tracking-widest">UNITY</p></div>
-            </div>
-            <div class="btn-nav btn-next" onclick="scrollR('reel-p-c', 400)">→</div>
-        </div>
-        <div class="mt-20 p-20 bg-[#ff6b00] text-black">
-             <h3 class="text-6xl font-black">UPCOMING: WHY?</h3>
-             <p class="uppercase tracking-widest mt-4">A Photobook by Darwin Wanjiru</p>
-        </div>
-    </section>
-
-    <section id="collab" class="page-section">
-        <h2 class="huge-title text-6xl mb-20 uppercase">Collaborate</h2>
-        <div class="grid md:grid-cols-2 gap-20">
+    <section id="home" class="page-section active pt-40 px-10 min-h-screen">
+        <div class="grid md:grid-cols-2 gap-20 items-center">
             <div>
-                <p class="text-xl leading-relaxed mb-10 opacity-70">Investing in a vision geared towards tackling the common crisis through the lens of human dignity and emotional realism.</p>
-                <button class="border-2 border-[#ff6b00] px-10 py-4 text-[#ff6b00] font-black uppercase tracking-widest hover:bg-[#ff6b00] hover:text-black transition">Donate: M-PESA 6880821</button>
+                <h1 class="text-8xl font-black leading-none mb-10">THE <br><span class="gradient-text">DIRECTOR</span></h1>
+                <p id="typewriter" class="text-[11px] uppercase tracking-[4px] leading-loose opacity-60"></p>
             </div>
-            <div class="text-[10px] uppercase tracking-widest space-y-4">
-                <p>Business Name: Foreign Box Ventures</p>
-                <p>Phone: +254 708 813 147</p>
+            <div class="relative">
+                <iframe id="home-reel" class="w-full aspect-video border border-white/5 opacity-0 transition-opacity duration-1000" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe>
+                <div class="shield"></div>
             </div>
+        </div>
+    </section>
+
+    <section id="film" class="page-section hidden pt-40">
+        <div class="reel-container">
+            <h2 class="text-[10px] tracking-[8px] uppercase text-[#ff6b00] mb-5">Completed Projects</h2>
+            <div class="horizontal-scroll" id="film-c">
+                <div class="card">
+                    <iframe src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview" class="vid-me"></iframe>
+                    <p class="text-[10px] mt-4 font-bold">ME! | 2025 | SHORT FILM | PRODUCER</p>
+                </div>
+                <div class="card">
+                    <div class="slide-container" data-images="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu,19SLlZbXSiOHKnSrgGZ8kvUjOj-jvJhb3"></div>
+                    <p class="text-[10px] mt-4 font-bold">STROKES OF LIFE | 2024 | SHORT | DIRECTOR & WRITER</p>
+                </div>
+                <div class="card">
+                    <iframe src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview?start=330"></iframe>
+                    <p class="text-[10px] mt-4 font-bold">TOUGH CHANGES | 2022 | SHORT | DIRECTOR/PRODUCER</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="collab" class="page-section hidden pt-40 px-10">
+        <div class="max-w-4xl mb-20">
+            <h2 class="text-5xl font-black mb-5 gradient-text">PARTNER WITH VISION</h2>
+            <p class="text-sm tracking-widest leading-loose opacity-70">You are invited to collaborate by sponsoring specific upcoming projects or our overarching production endeavors. Direct vision, shared impact.</p>
+        </div>
+
+        <div class="reel-container">
+            <h3 class="text-[10px] tracking-[5px] text-[#ff6b00] mb-5">PROVEN COLLABORATIONS</h3>
+            <div class="horizontal-scroll">
+                <div class="card"><div class="slide-container" data-images="1emf82nJJiZwuuZClQRxOQFfRJ6KJbKig,1sRIFOzCf2zQFiM-y_gteSfHSRGlL1Liq"></div><p class="mt-4 text-[10px]">APAC YOUTH CONGRESS</p></div>
+                <div class="card"><div class="slide-container" data-images="1OOCHVO8H1Vrc5Hhl2hr1pFa4oWt1PkGG,1ERT1dBEWU4vY40gAgJBSR2jiLZmxo2cP,1QANuuQCUFFZ5ZsKT9XMCx4-lZZpCI6dR"></div><p class="mt-4 text-[10px]">KREATIVE KLINIK WORKSHOP</p></div>
+            </div>
+        </div>
+
+        <div class="fixed bottom-10 right-10 flex gap-10 items-center">
+            <a href="https://instagram.com/glimpseofheaven.productions" class="text-[10px] hover:text-[#ff6b00]">INSTAGRAM</a>
+            <a href="https://youtube.com/@glimpseofheavenproductions" class="text-[10px] hover:text-[#ff6b00]">YOUTUBE</a>
+            <div class="bg-[#ff6b00] text-black px-8 py-3 font-bold text-[10px]">DONATE: MPESA 6880821</div>
         </div>
     </section>
 
     <script>
-        // Page Switching [cite: 8, 17]
+        // Custom Dot Cursor
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Home Reel Auto-Play Delay
+        setTimeout(() => {
+            const homeReel = document.getElementById('home-reel');
+            homeReel.classList.remove('opacity-0');
+            homeReel.src += "?autoplay=1&mute=1";
+        }, 5000);
+
+        // Slideshow Engine for Theatre/Strokes/Collab
+        document.querySelectorAll('.slide-container').forEach(container => {
+            const ids = container.dataset.images.split(',');
+            let idx = 0;
+            const img = document.createElement('img');
+            img.className = "w-full h-full object-cover transition-opacity duration-1000";
+            container.appendChild(img);
+            
+            setInterval(() => {
+                img.style.opacity = 0;
+                setTimeout(() => {
+                    img.src = `https://drive.google.com/thumbnail?id=${ids[idx]}&sz=w800`;
+                    img.style.opacity = 1;
+                    idx = (idx + 1) % ids.length;
+                }, 1000);
+            }, 5000);
+            img.src = `https://drive.google.com/thumbnail?id=${ids[0]}&sz=w800`;
+        });
+
+        // Navigation
         function showPage(id) {
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById('n-' + id).classList.add('active');
-            window.scrollTo(0,0);
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById('n-'+id).classList.add('active');
+            gsap.from("#"+id, { opacity: 0, x: 50, duration: 1 });
         }
 
-        // Horizontal Scrolling 
-        function scrollR(id, dist) {
-            document.getElementById(id).scrollBy({ left: dist, behavior: 'smooth' });
-        }
-
-        // Typewriter Effect [cite: 21]
-        const text = "Independent filmmaker from Kenya with a passion for producing stories that first entertain, then educate. Utilizing film as a transformative tool to reveal human dignity.";
-        let i = 0;
-        function type() {
-            if (i < text.length) {
-                document.getElementById("typewriter").innerHTML += text.charAt(i);
-                i++;
-                setTimeout(type, 30);
-            }
-        }
-        window.onload = type;
-
-        // Anti-Download Security 
+        // Anti-Right Click
         document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
