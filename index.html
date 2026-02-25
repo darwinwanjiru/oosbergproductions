@@ -7,57 +7,49 @@
     <link rel="icon" href="https://drive.google.com/thumbnail?id=1NxbOH7rq00dUIzJfnLOP_-o4liuZhyu9&sz=w32" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;900&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
     <style>
         :root { --orange: #ff6b00; --obsidian: #050505; --gold-grad: linear-gradient(135deg, #ffae00, #ff6b00, #ff3d00); }
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         body { background-color: var(--obsidian); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         #dot-cursor { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; mix-blend-mode: difference; }
 
-        /* Background Engine - Fixed Drive Reel */
-        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.2; filter: grayscale(100%); }
-        .video-bg iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-        .portrait-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; background-position: center; opacity: 0; transition: opacity 2.5s; filter: grayscale(100%) brightness(30%); }
+        /* Background Reel Engine */
+        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.15; filter: grayscale(100%); pointer-events: none; }
+        .video-bg iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        /* Unified Card Sizes (Based on "The Waiting Room") */
-        .card { 
-            min-width: 450px; 
-            height: 350px; 
-            background: rgba(255,255,255,0.02); 
-            border: 1px solid rgba(255,255,255,0.05); 
-            padding: 18px; 
-            transition: 0.5s; 
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .card:hover { border-color: var(--orange); transform: translateY(-8px); }
-        .media-box { width: 100%; height: 230px; overflow: hidden; position: relative; background: #000; }
-        .media-box iframe, .media-box img, .media-box div { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Navigation & HUD */
+        /* Unified Navigation */
         nav { z-index: 1000; mix-blend-mode: difference; }
         .nav-link { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; color: #666; transition: 0.3s; }
         .nav-link.active, .nav-link:hover { color: var(--orange); }
         .grad-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Layout */
-        .page-section { display: none; padding: 12vh 5vw; min-height: 100vh; position: relative; z-index: 10; }
+        /* Layout & Scrolling */
+        .page-section { display: none; padding: 12vh 8vw; min-height: 100vh; position: relative; z-index: 10; }
         .page-section.active { display: block; }
-        .horizontal-scroll { display: flex; overflow-x: auto; gap: 30px; scrollbar-width: none; padding: 20px 0; scroll-behavior: smooth; }
+        .horizontal-scroll { display: flex; overflow-x: auto; gap: 40px; scrollbar-width: none; padding: 20px 0; scroll-behavior: smooth; }
         .horizontal-scroll::-webkit-scrollbar { display: none; }
-        
-        .scroll-btn { background: rgba(255,107,0,0.1); border: 1px solid var(--orange); padding: 8px 15px; cursor: pointer; color: var(--orange); font-size: 10px; transition: 0.3s; z-index: 20; }
-        .scroll-btn:hover { background: var(--orange); color: #000; }
+
+        /* Unified Card Styling (Based on Waiting Room Size) */
+        .card { min-width: 480px; height: 380px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 20px; transition: 0.5s; flex-shrink: 0; display: flex; flex-direction: column; }
+        .card:hover { border-color: var(--orange); transform: translateY(-10px); }
+        .media-box { width: 100%; height: 260px; background: #000; overflow: hidden; position: relative; }
+        .media-box iframe, .media-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Screen Edge Arrow Buttons */
+        .side-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: 60px; height: 60px; background: rgba(255,107,0,0.1); border: 1px solid var(--orange); color: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; z-index: 100; transition: 0.3s; }
+        .side-arrow:hover { background: var(--orange); color: #000; }
+        .arrow-left { left: 20px; }
+        .arrow-right { right: 20px; }
 
         /* HUD Footer */
         .hud { position: fixed; z-index: 100; mix-blend-mode: difference; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; }
         .hud-left { bottom: 35px; left: 40px; }
         .hud-right { bottom: 35px; right: 40px; text-align: right; }
-        .hud-center { bottom: 20px; left: 50%; transform: translateX(-50%); opacity: 0.5; font-size: 8px; }
-        .donate-btn { position: fixed; top: 70%; right: 40px; transform: translateY(-50%) rotate(90deg); transform-origin: right; z-index: 101; border: 1px solid var(--orange); color: var(--orange); padding: 10px 25px; font-size: 10px; background: transparent; }
+        .hud-center { bottom: 20px; left: 50%; transform: translateX(-50%); opacity: 0.5; font-size: 8px; white-space: nowrap; }
+        .donate-btn { position: fixed; top: 75%; right: 40px; transform: translateY(-50%) rotate(90deg); transform-origin: right; z-index: 101; border: 1px solid var(--orange); color: var(--orange); padding: 10px 25px; font-size: 10px; background: transparent; }
 
-        .slideshow img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.2s; }
+        .slideshow img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.5s; }
         .slideshow img.active { opacity: 1; }
     </style>
 </head>
@@ -66,26 +58,22 @@
     <div id="dot-cursor"></div>
 
     <div class="video-bg">
-        <iframe src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview?autoplay=1&mute=1" frameborder="0"></iframe>
+        <iframe src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview?autoplay=1&mute=1&controls=0&loop=1" frameborder="0"></iframe>
     </div>
-    <div id="portrait-bg" class="portrait-bg"></div>
 
-    <div class="hud hud-left">
-        <p>+254 708 813 147</p>
-        <p>darwinwanjiru254@gmail.com</p>
-    </div>
-    <div class="hud hud-center">
-        Glimpse of Heaven • Oosberg Productions • HWC Entertainment • Igiza Arts • Creative Box • Artofunnex • Hamptons Collections
-    </div>
+    <div class="hud hud-left"><p>+254 708 813 147</p><p>darwinwanjiru254@gmail.com [cite: 14, 125]</p></div>
+    <div class="hud hud-center">Glimpse of Heaven • Oosberg • HWC • Igiza Arts • Creative Box • Artofunnex • Hamptons [cite: 139]</div>
     <div class="hud hud-right">
-        <a href="https://instagram.com/glimpseofheaven.productions" target="_blank">INSTAGRAM</a><br>
-        <a href="https://youtube.com/@glimpseofheavenproductions" target="_blank">YOUTUBE</a><br>
-        <a href="mailto:glimpseofheaven.productions@gmail.com">glimpseofheaven.productions@gmail.com</a>
+        <a href="https://instagram.com/glimpseofheaven.productions">INSTAGRAM</a> | 
+        <a href="https://youtube.com/@glimpseofheavenproductions">YOUTUBE</a> [cite: 15]
     </div>
-    <button onclick="showPage('collab')" class="donate-btn uppercase">Invest in Vision</button>
+    <button onclick="showPage('collab')" class="donate-btn uppercase">Invest in Vision [cite: 129]</button>
+
+    <div class="side-arrow arrow-left" onclick="scrollAll(-500)">&#8592;</div>
+    <div class="side-arrow arrow-right" onclick="scrollAll(500)">&#8594;</div>
 
     <nav class="fixed top-0 w-full p-10 flex justify-between items-start">
-        <div class="text-3xl font-black grad-text tracking-tighter cursor-pointer" onclick="showPage('home')">OOSBERG</div>
+        <div class="text-3xl font-black grad-text tracking-tighter cursor-pointer" onclick="showPage('home')">OOSBERG [cite: 139]</div>
         <div class="flex flex-col gap-4 text-right">
             <span onclick="showPage('home')" class="nav-link active" id="n-home">Home</span>
             <span onclick="showPage('film')" class="nav-link" id="n-film">Film</span>
@@ -96,103 +84,81 @@
     </nav>
 
     <section id="home" class="page-section active">
-        <h1 class="text-9xl font-black grad-text leading-[0.85] uppercase mb-20">DARWIN<br>WANJIRU</h1>
+        <h1 class="text-8xl font-black grad-text leading-none uppercase mb-20">DARWIN<br>WANJIRU</h1>
         <div class="grid md:grid-cols-2 gap-20">
             <div id="typewriter" class="text-[11px] uppercase tracking-[0.4em] leading-[2.5] opacity-70"></div>
-            <div class="media-box"><iframe id="home-reel" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe></div>
+            <div class="media-box rounded-lg border border-white/10 shadow-2xl">
+                <iframe src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview?autoplay=1&mute=1"></iframe> 
+            </div>
         </div>
     </section>
 
     <section id="film" class="page-section">
-        <h2 class="text-7xl font-black mb-12 grad-text">FILM</h2>
-        
-        <div class="mb-16">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-[10px] tracking-[5px] uppercase">Completed Projects</h3>
-                <div class="flex gap-2">
-                    <button onclick="scrollSection('f-c', -480)" class="scroll-btn">PREV</button>
-                    <button onclick="scrollSection('f-c', 480)" class="scroll-btn">NEXT</button>
-                </div>
-            </div>
-            <div class="horizontal-scroll" id="f-c">
-                <div class="card"><div class="media-box"><iframe class="auto-preview" src="https://www.youtube.com/embed/CpL2LXK1U-s?enablejsapi=1&mute=1"></iframe></div><p class="mt-4 text-[10px] font-bold">DRIFT (2025) - PRODUCER</p></div>
-                <div class="card"><div class="media-box"><iframe id="me-vid" class="auto-preview" src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview?mute=1"></iframe></div><p class="mt-4 text-[10px] font-bold">ME! (2025) - PRODUCER</p></div>
-                <div class="card"><div class="media-box"><iframe class="auto-preview" src="https://www.youtube.com/embed/7sP2mw_k7RQ?enablejsapi=1&mute=1"></iframe></div><p class="mt-4 text-[10px] font-bold">THE MISSING PIECE (2025) - DIRECTOR/WRITER/PRODUCER</p></div>
-                <div class="card"><div class="media-box slideshow" data-imgs="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu,19SLlZbXSiOHKnSrgGZ8kvUjOj-jvJhb3,1tYOnSmW-FshjSRE8cyWwg__pATAiHQOu,12AA-RanFcDx_rMXQghzdCnrA0Jq4lQw4"></div><p class="mt-4 text-[10px] font-bold">STROKES OF LIFE (2024) - DIRECTOR/WRITER</p></div>
-                <div class="card"><div class="media-box"><iframe class="auto-preview" src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview?start=330&mute=1"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">Tough Changes (2022) - Director/Writer/Producer</p></div>
-                <div class="card"><div class="media-box"><iframe class="auto-preview" src="https://www.youtube.com/embed/OQQv0R_SV1I?enablejsapi=1&mute=1"></iframe></div><p class="mt-4 text-[10px] font-bold">BLESSED CONJECTURE (2022) - PRODUCER</p></div>
-            </div>
+        <h2 class="text-6xl font-black mb-12 grad-text">FILM</h2>
+        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50">Completed Projects [cite: 42]</h3>
+        <div class="horizontal-scroll" id="film-comp">
+            <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/CpL2LXK1U-s?enablejsapi=1&mute=1&autoplay=1"></iframe></div><p class="mt-4 text-[10px] font-bold">DRIFT (2025) [cite: 47]</p></div>
+            <div class="card"><div class="media-box"><iframe src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview?mute=1&autoplay=1"></iframe></div><p class="mt-4 text-[10px] font-bold">ME! (2025) [cite: 49]</p></div>
+            <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/7sP2mw_k7RQ?enablejsapi=1&mute=1&autoplay=1"></iframe></div><p class="mt-4 text-[10px] font-bold">THE MISSING PIECE (2025) [cite: 54]</p></div>
+            <div class="card"><div class="media-box slideshow" data-imgs="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu"></div><p class="mt-4 text-[10px] font-bold">STROKES OF LIFE [cite: 58]</p></div>
+            <div class="card"><div class="media-box"><iframe src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview?start=330&mute=1&autoplay=1"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">Tough Changes [cite: 62]</p></div>
+            <div class="card"><div class="media-box"><iframe src="https://www.youtube.com/embed/OQQv0R_SV1I?enablejsapi=1&mute=1&autoplay=1"></iframe></div><p class="mt-4 text-[10px] font-bold">BLESSED CONJECTURE [cite: 64]</p></div>
         </div>
-
-        <div>
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-[10px] tracking-[5px] uppercase">Upcoming Projects</h3>
-                <div class="flex gap-2">
-                    <button onclick="scrollSection('f-u', -480)" class="scroll-btn">PREV</button>
-                    <button onclick="scrollSection('f-u', 480)" class="scroll-btn">NEXT</button>
-                </div>
-            </div>
-            <div class="horizontal-scroll" id="f-u">
-                <div class="card"><div class="media-box slideshow" data-imgs="165MRSFz8YtajUhQWoC6OhInk0TLmEkwN,1qbTa10fJN9-z3l_KyX0Bw95Pphx1AuVp,1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ"></div><p class="mt-4 text-[10px] font-bold">RUN! (2026) - PRODUCER & WRITER</p></div>
-                <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1my6FJ_mZWEqm5GADm6HZReyXZJfluTou&sz=w800"></div><p class="mt-4 text-[10px] font-bold">THE WAITING ROOM (2026) - PRODUCER</p></div>
-            </div>
+        <h3 class="text-[10px] tracking-[5px] uppercase mt-20 mb-6 opacity-50">Upcoming Projects [cite: 71]</h3>
+        <div class="horizontal-scroll" id="film-up">
+            <div class="card"><div class="media-box slideshow" data-imgs="165MRSFz8YtajUhQWoC6OhInk0TLmEkwN,1qbTa10fJN9-z3l_KyX0Bw95Pphx1AuVp"></div><p class="mt-4 text-[10px] font-bold uppercase">Run! (2026) [cite: 72]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1my6FJ_mZWEqm5GADm6HZReyXZJfluTou&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">The Waiting Room [cite: 75]</p></div>
         </div>
     </section>
 
     <section id="theatre" class="page-section">
-        <h2 class="text-7xl font-black mb-12 grad-text">THEATRE</h2>
-        <div class="mb-16">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-[10px] tracking-[5px] uppercase">Completed Stage Plays</h3>
-                <div class="flex gap-2">
-                    <button onclick="scrollSection('t-c', -480)" class="scroll-btn">PREV</button>
-                    <button onclick="scrollSection('t-c', 480)" class="scroll-btn">NEXT</button>
-                </div>
-            </div>
-            <div class="horizontal-scroll" id="t-c">
-                <div class="card"><div class="media-box"><iframe class="auto-preview" src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview?mute=1"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">The Last Confession (2025) - Actor</p></div>
-                <div class="card"><div class="media-box slideshow" data-imgs="1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF,1UIP92GwS_XcAhTF2p8Pgc3AIKak-WYzD"></div><p class="mt-4 text-[10px] font-bold uppercase">Fractured Ties (2025) - ASM</p></div>
-                <div class="card"><div class="media-box slideshow" data-imgs="1aaOZ9eb9KrFEOIuobQy6uJQ42Zsgh9Xy,1euSwDVMs_CTsMSyTDNtKxz0TNjkFiqLr,1rD0ynxkRoPk9LtQF8VakonIewGHXgNHT"></div><p class="mt-4 text-[10px] font-bold uppercase">Die Mentions in Dimensions (2022) - Actor</p></div>
-                <div class="card"><div class="media-box slideshow" data-imgs="1PXgfxZzfPIkIDKjvO4pfxzQX9cHhxw7j,1S9kdDS26yWSGv9v4wKQDhMsoLy6B9pLr,1uw5oxBPG-Gl8feRHTr2iU-SxdB6tKZzN"></div><p class="mt-4 text-[10px] font-bold uppercase">Bravado Aficionado (2019) - Actor</p></div>
-                <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Faced Defaced (2019) - Actor</p></div>
-                <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1DHGok1r_3wFp5CBtQWj2NSVjsUK04eMp&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Perishable Cherishables (2018) - Actor</p></div>
-                <div class="card"><div class="media-box slideshow" data-imgs="1ZfHMeB_j30bYe_C2cAbinsxMBSOoBxxw,1JR9I6dqPHWMLvGgIWO4aeQasUr7RKAUU"></div><p class="mt-4 text-[10px] font-bold uppercase">Sins and Secrets (2018) - Actor</p></div>
-            </div>
+        <h2 class="text-6xl font-black mb-12 grad-text">THEATRE</h2>
+        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50">Completed Plays [cite: 105]</h3>
+        <div class="horizontal-scroll" id="theatre-comp">
+            <div class="card"><div class="media-box"><iframe src="https://drive.google.com/file/d/1uZE0Mu0SAsDUYOaHE0jmVUgzls1Rzze6/preview?mute=1&autoplay=1"></iframe></div><p class="mt-4 text-[10px] font-bold uppercase">The Last Confession (2025) [cite: 106]</p></div>
+            <div class="card"><div class="media-box slideshow" data-imgs="1LnWSodQ3OWSqfJWOsXGtyteBEXoIjNZF,1UIP92GwS_XcAhTF2p8Pgc3AIKak-WYzD"></div><p class="mt-4 text-[10px] font-bold uppercase">Fractured Ties [cite: 108]</p></div>
+            <div class="card"><div class="media-box slideshow" data-imgs="1aaOZ9eb9KrFEOIuobQy6uJQ42Zsgh9Xy,1euSwDVMs_CTsMSyTDNtKxz0TNjkFiqLr"></div><p class="mt-4 text-[10px] font-bold uppercase">Die Mentions (2022) [cite: 110]</p></div>
+            <div class="card"><div class="media-box slideshow" data-imgs="1PXgfxZzfPIkIDKjvO4pfxzQX9cHhxw7j,1S9kdDS26yWSGv9v4wKQDhMsoLy6B9pLr"></div><p class="mt-4 text-[10px] font-bold uppercase">Bravado Aficionado [cite: 112]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1W_sl85fQ6-2GbHVXc14MNRafqsMBe_dN&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Faced Defaced [cite: 113]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1TX5q891Jm_iEp7q94okuRPto3uN8nANO&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Neighborhood Watch [cite: 118]</p></div>
         </div>
+        <h3 class="text-[10px] tracking-[5px] uppercase mt-20 mb-6 opacity-50">Upcoming Project [cite: 120]</h3>
+        <div class="card"><div class="media-box bg-white/5 flex items-center justify-center p-10 text-[10px] tracking-widest text-center">THE BLACK SHEEP<br>(Production) [cite: 121]</div><p class="mt-4 text-[10px] font-bold">THE BLACK SHEEP [cite: 121]</p></div>
     </section>
 
     <section id="photo" class="page-section">
-        <h2 class="text-7xl font-black mb-12 grad-text">PHOTOGRAPHY</h2>
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-[10px] tracking-[5px] uppercase">Gallery</h3>
-            <div class="flex gap-2">
-                <button onclick="scrollSection('p-g', -480)" class="scroll-btn">PREV</button>
-                <button onclick="scrollSection('p-g', 480)" class="scroll-btn">NEXT</button>
-            </div>
+        <h2 class="text-6xl font-black mb-12 grad-text">PHOTOGRAPHY</h2>
+        <h3 class="text-[10px] tracking-[5px] uppercase mb-6 opacity-50">Listed Works (12 Projects) [cite: 82]</h3>
+        <div class="horizontal-scroll" id="photo-comp">
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800"></div><p class="mt-4 text-[10px] font-bold">CALM [cite: 83]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800"></div><p class="mt-4 text-[10px] font-bold">IRON [cite: 84]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800"></div><p class="mt-4 text-[10px] font-bold">ORDER [cite: 85]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LX0unSMVlrCXMqP3A5tUY15isJXeV66J&sz=w800"></div><p class="mt-4 text-[10px] font-bold">BEHOLDER [cite: 86]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1M7G5OWokkkIPmHCz_TZyZJGCgIiR_cUB&sz=w800"></div><p class="mt-4 text-[10px] font-bold">UNITY [cite: 87]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1Mg2DkIj47N8QQ4Adyfn5M-gkjX7wn7MW&sz=w800"></div><p class="mt-4 text-[10px] font-bold">NATURAL [cite: 88]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1WELCtmX_SMlHCtOMNUMJnkAAyCIbdkMY&sz=w800"></div><p class="mt-4 text-[10px] font-bold">FOCUS [cite: 89]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1Lgw45_Nkear7VQSYNf189oX87yUpzuxD&sz=w800"></div><p class="mt-4 text-[10px] font-bold">FRAME [cite: 90]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1_Us2hseIoji9idiAwVhQRJNTOaU9Agx_&sz=w800"></div><p class="mt-4 text-[10px] font-bold">INTERACTION [cite: 91]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1UgeewGbBXYGNmTQ29LrtnknMeT_JNaO4&sz=w800"></div><p class="mt-4 text-[10px] font-bold">URBAN [cite: 92]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LdaFCwXBNmQzOrwcxh7IQOx1CbqbjbGL&sz=w800"></div><p class="mt-4 text-[10px] font-bold">PEOPLE [cite: 93]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1vQMPlALwePYkfRqERSq3whQkrAM4rR-A&sz=w800"></div><p class="mt-4 text-[10px] font-bold">THERE IT IS [cite: 94]</p></div>
         </div>
-        <div class="horizontal-scroll" id="p-g">
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1CJ2LJTEstTqsUoNRkZ2QhnjeMzAExc61&sz=w800"></div><p class="mt-4 text-[10px] font-bold">CALM</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800"></div><p class="mt-4 text-[10px] font-bold">IRON</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1TXlLdGgEEez27WJiqm4QZzo1gmIMVUR7&sz=w800"></div><p class="mt-4 text-[10px] font-bold">ORDER</p></div>
-            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LX0unSMVlrCXMqP3A5tUY15isJXeV66J&sz=w800"></div><p class="mt-4 text-[10px] font-bold">BEHOLDER</p></div>
-        </div>
+        <h3 class="text-[10px] tracking-[5px] uppercase mt-20 mb-6 opacity-50">Upcoming Project [cite: 95]</h3>
+        <div class="card"><div class="media-box bg-white/5 p-12 text-[10px] tracking-[4px] leading-loose text-center">WHY – A photobook by Darwin Wanjiru.<br>(Environmental Awareness) [cite: 98]</div><p class="mt-4 text-[10px] font-bold uppercase">WHY Photobook [cite: 96]</p></div>
     </section>
 
     <section id="collab" class="page-section">
-        <div class="max-w-4xl pt-10">
-            <h2 class="text-8xl font-black grad-text mb-12">COLLABORATE</h2>
-            <div class="grid md:grid-cols-2 gap-12 mb-20">
-                <div class="border border-white/10 p-12 bg-white/5"><h3 class="text-orange-500 text-[10px] mb-6">ENGAGE</h3><p class="text-[10px] mb-8">Follow us for updates.</p><div class="flex gap-4"><a href="#" class="text-[10px] border border-white/20 px-6 py-3">INSTAGRAM</a></div></div>
-                <div class="border border-white/10 p-12 bg-white/5"><h3 class="text-orange-500 text-[10px] mb-6">INVEST</h3><p class="text-[10px] mb-8">Support high-impact art.</p><div class="bg-orange-600/10 p-6 border border-orange-500/30"><p class="text-[11px] font-bold">MPESA TILL: 6880821</p></div></div>
-            </div>
-            
-            <h3 class="text-[10px] tracking-[5px] uppercase mb-10">Evidence of Work</h3>
-            <div class="horizontal-scroll" id="c-e">
-                <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800"></div><p class="mt-4 text-[10px] uppercase">Kreative Klinik Workshop</p></div>
-                <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LdaFCwXBNmQzOrwcxh7IQOx1CbqbjbGL&sz=w800"></div><p class="mt-4 text-[10px] uppercase">Igiza Arts Production Team Building</p></div>
-                <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1vQMPlALwePYkfRqERSq3whQkrAM4rR-A&sz=w800"></div><p class="mt-4 text-[10px] uppercase">APAC Youth Congress</p></div>
-                <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1TX5q891Jm_iEp7q94okuRPto3uN8nANO&sz=w800"></div><p class="mt-4 text-[10px] uppercase">First International Forum of Filmmakers</p></div>
-            </div>
+        <h2 class="text-7xl font-black grad-text mb-12">COLLABORATE [cite: 13, 122]</h2>
+        <div class="grid md:grid-cols-2 gap-10 mb-20">
+            <div class="border border-white/10 p-12 bg-white/5"><h3 class="text-orange-500 text-[10px] mb-6">ENGAGE [cite: 124]</h3><div class="flex gap-4"><a href="#" class="text-[10px] border border-white/20 px-6 py-3 hover:bg-white hover:text-black">INSTAGRAM</a><a href="#" class="text-[10px] border border-white/20 px-6 py-3 hover:bg-white hover:text-black">YOUTUBE</a></div></div>
+            <div class="border border-white/10 p-12 bg-white/5"><h3 class="text-orange-500 text-[10px] mb-6">INVEST [cite: 126]</h3><div class="bg-orange-600/10 p-6 border border-orange-500/30 text-[11px] font-bold tracking-widest uppercase">MPESA TILL: 6880821 [cite: 127]</div></div>
+        </div>
+        
+        <h3 class="text-[10px] tracking-[5px] uppercase mb-10 opacity-50">Proof of Work [cite: 136]</h3>
+        <div class="horizontal-scroll" id="collab-proof">
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1EG3eiafN8RyCwxDTXnkezixFPAaEwDNQ&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Kreative Klinik Workshop </p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1LdaFCwXBNmQzOrwcxh7IQOx1CbqbjbGL&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">Igiza Arts Team Building [cite: 119]</p></div>
+            <div class="card"><div class="media-box"><img src="https://drive.google.com/thumbnail?id=1vQMPlALwePYkfRqERSq3whQkrAM4rR-A&sz=w800"></div><p class="mt-4 text-[10px] font-bold uppercase">First Int. Filmmakers Forum </p></div>
         </div>
     </section>
 
@@ -200,40 +166,21 @@
         const cursor = document.getElementById('dot-cursor');
         document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
 
-        // Portraits BG
-        const portraitList = ["1MiFANCBKfY8A__53_g_ZX58QYtLGinUa", "1CVMzCX153eWk9-IGmKEgT2fdMbjJ_lrN", "1FA5maA6Zw7JOvT7BSaRUkPF8aO63-NFy", "1TpUSmoPhOUF05SU-OuGL1E136yh1KsGP", "1uEReME9GleXRkhrrisyu9d-LkgSNuXA2"];
-        let pIdx = 0;
-        const pBg = document.getElementById('portrait-bg');
-        function cyclePortrait() {
-            pBg.style.opacity = 0;
-            setTimeout(() => {
-                pBg.style.backgroundImage = `url(https://drive.google.com/thumbnail?id=${portraitList[pIdx]}&sz=w1920)`;
-                pBg.style.opacity = 0.25;
-                pIdx = (pIdx + 1) % portraitList.length;
-            }, 2500);
+        // Scroll Logic for Side Arrows
+        function scrollAll(val) {
+            document.querySelectorAll('.horizontal-scroll').forEach(s => {
+                const rect = s.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) { s.scrollBy({ left: val, behavior: 'smooth' }); }
+            });
         }
-        setInterval(cyclePortrait, 9000); cyclePortrait();
 
-        // ME! 30s Restart
-        setInterval(() => { const me = document.getElementById('me-vid'); me.src = me.src; }, 30000);
-
-        // Home Delay
-        setTimeout(() => { const hr = document.getElementById('home-reel'); hr.src += "?autoplay=1&mute=1"; }, 5000);
-
-        // Slideshows
-        document.querySelectorAll('.slideshow').forEach(s => {
-            const ids = s.dataset.imgs.split(',');
-            ids.forEach((id, i) => { const img = document.createElement('img'); img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w800`; if(i===0) img.classList.add('active'); s.appendChild(img); });
-            let cur = 0; const imgs = s.querySelectorAll('img');
-            setInterval(() => { if(imgs.length > 0) { imgs[cur].classList.remove('active'); cur = (cur+1)%imgs.length; imgs[cur].classList.add('active'); } }, 5000);
-        });
-
-        // Typewriter
-        const introText = "I am an independent international filmmaker from Kenya with a passion for producing stories that first entertain, then educate society.";
+        // Typewriter Effect
+        const introText = "I am an independent international filmmaker from Kenya with a passion for producing stories that first entertain, then educate society on issues affecting their social and economic well-being. [cite: 22, 133]";
         let charIdx = 0;
         function typeEffect() { if (charIdx < introText.length) { document.getElementById("typewriter").innerHTML += introText.charAt(charIdx); charIdx++; setTimeout(typeEffect, 35); } }
         window.onload = typeEffect;
 
+        // Page Switcher
         function showPage(id) {
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
@@ -242,7 +189,13 @@
             window.scrollTo(0,0);
         }
 
-        function scrollSection(id, val) { document.getElementById(id).scrollBy({ left: val, behavior: 'smooth' }); }
+        // Slideshows
+        document.querySelectorAll('.slideshow').forEach(s => {
+            const ids = s.dataset.imgs.split(',');
+            ids.forEach((id, i) => { const img = document.createElement('img'); img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w800`; if(i===0) img.classList.add('active'); s.appendChild(img); });
+            let cur = 0; const imgs = s.querySelectorAll('img');
+            setInterval(() => { if(imgs.length > 0) { imgs[cur].classList.remove('active'); cur = (cur+1)%imgs.length; imgs[cur].classList.add('active'); } }, 5000);
+        });
 
         document.addEventListener('contextmenu', e => e.preventDefault());
         showPage('home');
