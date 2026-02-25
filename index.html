@@ -3,62 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oosberg Productions | Darwin Wanjiru</title>
-    <link rel="icon" href="https://drive.google.com/thumbnail?id=1clv9A5QUUW6esjrFNjJhJR-HZlqKqxJH&sz=w32" type="image/x-icon">
+    <title>Darwin Wanjiru | Multidisciplinary Artist</title>
+    <link rel="icon" href="https://drive.google.com/thumbnail?id=1NxbOH7rq00dUIzJfnLOP_-o4liuZhyu9&sz=w32" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;900&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: linear-gradient(90deg, #ff6b00, #ffae00, #ff3d00); --obsidian: #030303; }
+        :root { --orange: #ff6b00; --obsidian: #050505; --gold-grad: linear-gradient(90deg, #ff6b00, #ffae00); }
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         body { background-color: var(--obsidian); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-
-        /* Custom Cursor: The Dot */
-        #cursor { width: 8px; height: 8px; background: #ff6b00; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s; }
-
-        /* Background Cinematic Engine */
-        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.25; filter: contrast(120%) grayscale(50%); }
-        .bg-portrait { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-size: cover; background-position: center; animation: bgFade 20s infinite; opacity: 0.15; }
-        @keyframes bgFade { 0%, 100% { background-image: url('https://drive.google.com/thumbnail?id=1clv9A5QUUW6esjrFNjJhJR-HZlqKqxJH&sz=w1920'); } 33% { background-image: url('https://drive.google.com/thumbnail?id=1Z9GQfzwKIUkQ6u4UT6kj7KoXPIZe7yum&sz=w1920'); } 66% { background-image: url('https://drive.google.com/thumbnail?id=15ZKyzHAy66p9ZT6dUeH1-9Vi9qanfylL&sz=w1920'); } }
-
-        /* Glossy Gold Gradient Fonts */
-        .gradient-text { background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Playfair Display', serif; }
         
-        /* Navigation & HUD */
-        nav { z-index: 1000; mix-blend-mode: difference; }
-        .nav-link { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #888; transition: 0.5s; }
-        .nav-link:hover { color: #ff6b00; transform: skewX(-10deg); }
+        /* Pointer: Dot */
+        #dot-cursor { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; mix-blend-mode: difference; }
 
-        /* Horizontal Tiers */
-        .reel-container { position: relative; margin-bottom: 100px; padding: 0 40px; }
-        .horizontal-scroll { display: flex; overflow-x: auto; gap: 40px; scroll-behavior: smooth; padding: 40px 0; scrollbar-width: none; }
+        /* 3 & 4. Background Cinematic Engine (Reel + Portraits) */
+        .video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; }
+        .video-bg iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; opacity: 0.3; filter: grayscale(100%) contrast(110%); }
+        .portrait-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; background-position: center; opacity: 0; transition: opacity 2.5s ease-in-out; filter: grayscale(100%) brightness(40%); }
+        .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, var(--obsidian) 95%); z-index: 0; pointer-events: none; }
+
+        /* Navigation */
+        nav { z-index: 1000; mix-blend-mode: difference; }
+        .nav-link { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; color: #666; transition: 0.3s; }
+        .nav-link.active, .nav-link:hover { color: var(--orange); }
+
+        /* Typography */
+        .grad-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Playfair Display', serif; }
+        .huge-title { font-size: clamp(4rem, 12vw, 15rem); font-weight: 900; line-height: 0.8; letter-spacing: -0.05em; text-transform: uppercase; }
+
+        /* Section Layouts */
+        .page-section { display: none; padding: 15vh 5vw 10vh; min-height: 100vh; position: relative; z-index: 10; }
+        .page-section.active { display: block; }
+        .reel-container { position: relative; margin-bottom: 80px; }
+        .horizontal-scroll { display: flex; overflow-x: auto; gap: 30px; scroll-behavior: smooth; padding: 20px 0; scrollbar-width: none; }
         .horizontal-scroll::-webkit-scrollbar { display: none; }
         
-        /* Project Box Visuals */
-        .card { min-width: 450px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); padding: 15px; position: relative; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-        .card:hover { border-color: #ff6b00; transform: scale(1.02) rotateY(5deg); box-shadow: 0 0 30px rgba(255,107,0,0.2); }
-        .card iframe, .card .slide-container { width: 100%; aspect-ratio: 16/9; border: none; pointer-events: auto; }
+        .card { min-width: 420px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 18px; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .card:hover { border-color: var(--orange); transform: translateY(-10px); background: rgba(20,20,20,0.4); }
 
-        /* Transitions */
-        .fade-in { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        /* Anti-Download Shield */
-        .shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
+        /* HUD Footer Elements (Pointers a, c) */
+        .hud { position: fixed; z-index: 100; mix-blend-mode: difference; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; }
+        .hud-left { bottom: 40px; left: 40px; line-height: 1.8; }
+        .hud-right { bottom: 40px; right: 40px; text-align: right; line-height: 1.8; }
+        .hud-center { bottom: 20px; left: 50%; transform: translateX(-50%); opacity: 0.5; display: flex; gap: 20px; width: max-content; }
+        
+        .donate-btn { position: fixed; top: 50%; right: 40px; transform: translateY(-50%) rotate(90deg); transform-origin: right; z-index: 101; border: 1px solid var(--orange); color: var(--orange); padding: 12px 25px; font-size: 10px; transition: 0.3s; background: transparent; letter-spacing: 3px; }
+        .donate-btn:hover { background: var(--orange); color: #000; }
+        
+        .slide-img { width: 100%; aspect-ratio: 16/9; object-cover: cover; transition: opacity 0.8s ease; }
     </style>
 </head>
 <body>
 
-    <div id="cursor"></div>
+    <div id="dot-cursor"></div>
 
     <div class="video-bg">
-        <iframe id="bg-video" src="https://www.youtube.com/embed/ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_?autoplay=1&mute=1&controls=0&loop=1&playlist=ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_" class="w-full h-full scale-110"></iframe>
+        <iframe src="https://www.youtube.com/embed/ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_?autoplay=1&mute=1&controls=0&loop=1&playlist=ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_" frameborder="0"></iframe>
     </div>
-    <div class="bg-portrait"></div>
+    <div id="portrait-bg" class="portrait-bg"></div>
+    <div class="vignette"></div>
+
+    <div class="hud hud-left">
+        <p>+254 708 813 147</p>
+        <p>darwinwanjiru254@gmail.com</p>
+    </div>
+    
+    <div class="hud hud-center">
+        <span>Glimpse of Heaven Productions</span> • <span>Oosberg Productions</span> • <span>HWC Entertainment</span> • <span>Igiza Arts</span> • <span>Hamptons Collections</span>
+    </div>
+
+    <div class="hud hud-right">
+        <a href="https://www.instagram.com/glimpseofheaven.productions" target="_blank" class="block hover:text-[#ff6b00]">INSTAGRAM</a>
+        <a href="https://youtube.com/@glimpseofheavenproductions" target="_blank" class="block hover:text-[#ff6b00]">YOUTUBE</a>
+        <a href="mailto:glimpseofheaven.productions@gmail.com" class="block hover:text-[#ff6b00]">glimpseofheaven.productions@gmail.com</a>
+    </div>
+
+    <button onclick="showPage('collab')" class="donate-btn uppercase">Invest in Vision</button>
 
     <nav class="fixed top-0 w-full p-10 flex justify-between items-start">
-        <div class="text-3xl font-black gradient-text tracking-tighter" style="cursor: pointer;" onclick="showPage('home')">OOSBERG</div>
-        <div class="flex flex-col gap-3 text-right">
+        <div class="text-3xl font-black grad-text tracking-tighter cursor-pointer" onclick="showPage('home')">OOSBERG</div>
+        <div class="flex flex-col gap-4 text-right">
             <span onclick="showPage('home')" class="nav-link active" id="n-home">Home</span>
             <span onclick="showPage('film')" class="nav-link" id="n-film">Film</span>
             <span onclick="showPage('theatre')" class="nav-link" id="n-theatre">Theatre</span>
@@ -67,104 +91,110 @@
         </div>
     </nav>
 
-    <section id="home" class="page-section active pt-40 px-10 min-h-screen">
-        <div class="grid md:grid-cols-2 gap-20 items-center">
-            <div>
-                <h1 class="text-8xl font-black leading-none mb-10">THE <br><span class="gradient-text">DIRECTOR</span></h1>
-                <p id="typewriter" class="text-[11px] uppercase tracking-[4px] leading-loose opacity-60"></p>
-            </div>
+    <section id="home" class="page-section active">
+        <h1 class="huge-title grad-text">DARWIN<br>WANJIRU</h1>
+        <div class="grid md:grid-cols-2 mt-20 gap-20 items-center">
+            <div id="typewriter" class="text-[11px] uppercase tracking-[0.4em] leading-[2.2] opacity-70">
+                </div>
             <div class="relative">
                 <iframe id="home-reel" class="w-full aspect-video border border-white/5 opacity-0 transition-opacity duration-1000" src="https://drive.google.com/file/d/1ygRf6QJc_aZTQm1ULt1eSDPpppYFLAw_/preview"></iframe>
-                <div class="shield"></div>
-            </div>
+                <div class="absolute inset-0 z-10"></div> </div>
         </div>
     </section>
 
-    <section id="film" class="page-section hidden pt-40">
+    <section id="film" class="page-section">
+        <h2 class="text-6xl font-black mb-16 grad-text">FILM</h2>
         <div class="reel-container">
-            <h2 class="text-[10px] tracking-[8px] uppercase text-[#ff6b00] mb-5">Completed Projects</h2>
-            <div class="horizontal-scroll" id="film-c">
+            <h3 class="text-[9px] tracking-[5px] text-[#ff6b00] mb-6 uppercase">Completed Projects</h3>
+            <div class="horizontal-scroll" id="reel-f-c">
                 <div class="card">
-                    <iframe src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview" class="vid-me"></iframe>
-                    <p class="text-[10px] mt-4 font-bold">ME! | 2025 | SHORT FILM | PRODUCER</p>
+                    <iframe src="https://drive.google.com/file/d/1A0AXqhuJh8xekyH41Ggu0HjyOWuMqmEg/preview" class="w-full aspect-video" id="me-vid"></iframe>
+                    <p class="mt-4 text-[10px] font-bold">ME! | 2025 | SHORT FILM | PRODUCER</p>
                 </div>
                 <div class="card">
-                    <div class="slide-container" data-images="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu,19SLlZbXSiOHKnSrgGZ8kvUjOj-jvJhb3"></div>
-                    <p class="text-[10px] mt-4 font-bold">STROKES OF LIFE | 2024 | SHORT | DIRECTOR & WRITER</p>
+                    <div class="slideshow-box" data-imgs="1qRhT-1m7cJTzyYiuRqYubrNoamhll4-6,19d9tWl1MBiETZHHte1dB_Dnh78FSdCTu,19SLlZbXSiOHKnSrgGZ8kvUjOj-jvJhb3,1tYOnSmW-FshjSRE8cyWwg__pATAiHQOu,12AA-RanFcDx_rMXQghzdCnrA0Jq4lQw4"></div>
+                    <p class="mt-4 text-[10px] font-bold uppercase">Strokes of Life | 2024 | Short | Director & Writer</p>
                 </div>
                 <div class="card">
-                    <iframe src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview?start=330"></iframe>
-                    <p class="text-[10px] mt-4 font-bold">TOUGH CHANGES | 2022 | SHORT | DIRECTOR/PRODUCER</p>
+                    <iframe src="https://drive.google.com/file/d/1eeuSZBn--bjT5vSfKEAIgjWeQyK_2VCP/preview?start=330" class="w-full aspect-video"></iframe>
+                    <p class="mt-4 text-[10px] font-bold uppercase">Tough Changes | 2022 | Short | Director/Writer/Producer</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section id="collab" class="page-section hidden pt-40 px-10">
-        <div class="max-w-4xl mb-20">
-            <h2 class="text-5xl font-black mb-5 gradient-text">PARTNER WITH VISION</h2>
-            <p class="text-sm tracking-widest leading-loose opacity-70">You are invited to collaborate by sponsoring specific upcoming projects or our overarching production endeavors. Direct vision, shared impact.</p>
-        </div>
-
-        <div class="reel-container">
-            <h3 class="text-[10px] tracking-[5px] text-[#ff6b00] mb-5">PROVEN COLLABORATIONS</h3>
-            <div class="horizontal-scroll">
-                <div class="card"><div class="slide-container" data-images="1emf82nJJiZwuuZClQRxOQFfRJ6KJbKig,1sRIFOzCf2zQFiM-y_gteSfHSRGlL1Liq"></div><p class="mt-4 text-[10px]">APAC YOUTH CONGRESS</p></div>
-                <div class="card"><div class="slide-container" data-images="1OOCHVO8H1Vrc5Hhl2hr1pFa4oWt1PkGG,1ERT1dBEWU4vY40gAgJBSR2jiLZmxo2cP,1QANuuQCUFFZ5ZsKT9XMCx4-lZZpCI6dR"></div><p class="mt-4 text-[10px]">KREATIVE KLINIK WORKSHOP</p></div>
-            </div>
-        </div>
-
-        <div class="fixed bottom-10 right-10 flex gap-10 items-center">
-            <a href="https://instagram.com/glimpseofheaven.productions" class="text-[10px] hover:text-[#ff6b00]">INSTAGRAM</a>
-            <a href="https://youtube.com/@glimpseofheavenproductions" class="text-[10px] hover:text-[#ff6b00]">YOUTUBE</a>
-            <div class="bg-[#ff6b00] text-black px-8 py-3 font-bold text-[10px]">DONATE: MPESA 6880821</div>
         </div>
     </section>
 
     <script>
         // Custom Dot Cursor
-        const cursor = document.getElementById('cursor');
+        const cursor = document.getElementById('dot-cursor');
         document.addEventListener('mousemove', e => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
 
-        // Home Reel Auto-Play Delay
+        // Background Engine: Portraits Slideshow (Pointer 4)
+        const portraits = ["1MiFANCBKfY8A__53_g_ZX58QYtLGinUa", "1CVMzCX153eWk9-IGmKEgT2fdMbjJ_lrN", "1FA5maA6Zw7JOvT7BSaRUkPF8aO63-NFy", "1TpUSmoPhOUF05SU-OuGL1E136yh1KsGP", "1uEReME9GleXRkhrrisyu9d-LkgSNuXA2"];
+        let pIdx = 0;
+        const pBg = document.getElementById('portrait-bg');
+        function cycleBG() {
+            pBg.style.opacity = 0;
+            setTimeout(() => {
+                pBg.style.backgroundImage = `url(https://drive.google.com/thumbnail?id=${portraits[pIdx]}&sz=w1920)`;
+                pBg.style.opacity = 0.25;
+                pIdx = (pIdx + 1) % portraits.length;
+            }, 2500);
+        }
+        setInterval(cycleBG, 9000); cycleBG();
+
+        // ME! 30s Restart Logic
+        setInterval(() => {
+            const me = document.getElementById('me-vid');
+            me.src = me.src;
+        }, 30000);
+
+        // Home Reel 5s delay
         setTimeout(() => {
-            const homeReel = document.getElementById('home-reel');
-            homeReel.classList.remove('opacity-0');
-            homeReel.src += "?autoplay=1&mute=1";
+            const hr = document.getElementById('home-reel');
+            hr.classList.remove('opacity-0');
+            hr.src += "&autoplay=1&mute=1";
         }, 5000);
 
-        // Slideshow Engine for Theatre/Strokes/Collab
-        document.querySelectorAll('.slide-container').forEach(container => {
-            const ids = container.dataset.images.split(',');
-            let idx = 0;
+        // Internal Slideshow System for Theatre/Strokes
+        document.querySelectorAll('.slideshow-box').forEach(box => {
+            const ids = box.dataset.imgs.split(',');
+            let i = 0;
             const img = document.createElement('img');
-            img.className = "w-full h-full object-cover transition-opacity duration-1000";
-            container.appendChild(img);
-            
-            setInterval(() => {
+            img.className = "slide-img";
+            box.appendChild(img);
+            function nextImg() {
                 img.style.opacity = 0;
                 setTimeout(() => {
-                    img.src = `https://drive.google.com/thumbnail?id=${ids[idx]}&sz=w800`;
+                    img.src = `https://drive.google.com/thumbnail?id=${ids[i]}&sz=w800`;
                     img.style.opacity = 1;
-                    idx = (idx + 1) % ids.length;
-                }, 1000);
-            }, 5000);
-            img.src = `https://drive.google.com/thumbnail?id=${ids[0]}&sz=w800`;
+                    i = (i + 1) % ids.length;
+                }, 800);
+            }
+            setInterval(nextImg, 5000); nextImg();
         });
 
-        // Navigation
+        // Typewriter & Navigation
+        const introText = "I am an independent international filmmaker from Kenya with a passion for producing stories that first entertain, then educate society on issues affecting their social, physical, economic, and spiritual well-being...";
+        let charIdx = 0;
+        function typeEffect() {
+            if (charIdx < introText.length) {
+                document.getElementById("typewriter").innerHTML += introText.charAt(charIdx);
+                charIdx++; setTimeout(typeEffect, 35);
+            }
+        }
+        window.onload = typeEffect;
+
         function showPage(id) {
-            document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById('n-'+id).classList.add('active');
-            gsap.from("#"+id, { opacity: 0, x: 50, duration: 1 });
+            document.getElementById(id).classList.add('active');
+            document.getElementById('n-' + id).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        // Anti-Right Click
         document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
